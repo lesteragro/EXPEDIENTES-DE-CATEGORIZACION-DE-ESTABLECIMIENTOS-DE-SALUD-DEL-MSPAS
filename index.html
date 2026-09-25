@@ -23,13 +23,9 @@
   --amarillo:#d89a21;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
-html{
-  scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
   margin:0;
@@ -37,10 +33,6 @@ body{
   background:var(--fondo);
   color:var(--texto);
 }
-
-/* =========================================================
-   ENCABEZADO
-========================================================= */
 
 header{
   min-height:180px;
@@ -75,21 +67,10 @@ nav a{
   font-size:15px;
 }
 
-nav a:hover{
-  color:var(--celeste);
-}
-
-/* =========================================================
-   HERO
-========================================================= */
+nav a:hover{color:var(--celeste)}
 
 .hero{
-  background:linear-gradient(
-    100deg,
-    #07517e,
-    #078bc9 70%,
-    #25a9d4
-  );
+  background:linear-gradient(100deg,#07517e,#078bc9 70%,#25a9d4);
   color:#fff;
   padding:34px 4% 38px;
 }
@@ -118,10 +99,6 @@ nav a:hover{
   font-size:16px;
 }
 
-/* =========================================================
-   CONTENEDOR
-========================================================= */
-
 main{
   width:94%;
   max-width:1800px;
@@ -143,9 +120,7 @@ main{
   box-shadow:0 8px 25px rgba(22,68,94,.05);
 }
 
-.card h3{
-  margin:0 0 7px;
-}
+.card h3{margin:0 0 7px}
 
 .sub{
   font-size:13px;
@@ -158,12 +133,7 @@ main{
   gap:10px;
 }
 
-/* =========================================================
-   CAMPOS Y BOTONES
-========================================================= */
-
-input,
-select{
+input,select{
   width:100%;
   padding:11px;
   border:1px solid #c8dce8;
@@ -173,8 +143,7 @@ select{
   outline:none;
 }
 
-input:focus,
-select:focus{
+input:focus,select:focus{
   border-color:var(--celeste);
   box-shadow:0 0 0 3px rgba(7,141,204,.10);
 }
@@ -190,9 +159,7 @@ button{
   white-space:nowrap;
 }
 
-button:hover{
-  background:#067db4;
-}
+button:hover{background:#067db4}
 
 .status{
   margin-top:12px;
@@ -213,22 +180,12 @@ button:hover{
   color:#a62e42;
 }
 
-/* =========================================================
-   RESULTADO BUSCADOR
-========================================================= */
-
 #resultado{
   display:none;
   margin-top:18px;
 }
 
-/* =========================================================
-   FILTROS
-========================================================= */
-
-.filtros{
-  margin-top:18px;
-}
+.filtros{margin-top:18px}
 
 .filtergrid{
   display:grid;
@@ -243,10 +200,6 @@ label{
   color:#6c8291;
   margin-bottom:5px;
 }
-
-/* =========================================================
-   KPI
-========================================================= */
 
 .kpis{
   display:grid;
@@ -263,17 +216,9 @@ label{
   padding:15px;
 }
 
-.kpi.green{
-  border-left-color:var(--verde);
-}
-
-.kpi.red{
-  border-left-color:var(--rojo);
-}
-
-.kpi.yellow{
-  border-left-color:var(--amarillo);
-}
+.kpi.green{border-left-color:var(--verde)}
+.kpi.red{border-left-color:var(--rojo)}
+.kpi.yellow{border-left-color:var(--amarillo)}
 
 .kpi small{
   font-weight:900;
@@ -285,10 +230,6 @@ label{
   font-size:28px;
   margin-top:14px;
 }
-
-/* =========================================================
-   GRÁFICAS
-========================================================= */
 
 .section-title{
   margin:30px 0 14px;
@@ -316,10 +257,6 @@ label{
 .chart canvas{
   max-height:315px;
 }
-
-/* =========================================================
-   TABLAS
-========================================================= */
 
 .tablebox{
   overflow:auto;
@@ -352,9 +289,7 @@ td{
   vertical-align:top;
 }
 
-tbody tr:hover{
-  background:#f8fcfe;
-}
+tbody tr:hover{background:#f8fcfe}
 
 .badge{
   display:inline-block;
@@ -380,10 +315,6 @@ tbody tr:hover{
   color:#936000;
 }
 
-/* =========================================================
-   INFORMACIÓN DE CARGA
-========================================================= */
-
 .db-info{
   display:flex;
   align-items:center;
@@ -391,19 +322,13 @@ tbody tr:hover{
   gap:15px;
 }
 
-.db-title{
-  flex:1;
-}
+.db-title{flex:1}
 
 .actualizacion{
   margin-top:5px;
   color:var(--gris);
   font-size:12px;
 }
-
-/* =========================================================
-   FOOTER
-========================================================= */
 
 footer{
   text-align:center;
@@ -412,28 +337,13 @@ footer{
   font-size:12px;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
 @media(max-width:1200px){
-
-  .filtergrid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .kpis{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  .charts,
-  .charts3{
-    grid-template-columns:1fr;
-  }
+  .filtergrid{grid-template-columns:repeat(3,1fr)}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .charts,.charts3{grid-template-columns:1fr}
 }
 
 @media(max-width:800px){
-
   header{
     flex-direction:column;
     align-items:flex-start;
@@ -445,181 +355,133 @@ footer{
     max-height:none;
   }
 
-  nav{
-    gap:15px;
-  }
-
-  .grid2{
-    grid-template-columns:1fr;
-  }
-
-  .filtergrid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .kpis{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .hero h1{
-    font-size:29px;
-  }
+  nav{gap:15px}
+  .grid2{grid-template-columns:1fr}
+  .filtergrid{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:29px}
 }
 
 @media(max-width:520px){
-
-  .filtergrid,
-  .kpis{
-    grid-template-columns:1fr;
-  }
-
-  .row{
-    flex-direction:column;
-  }
+  .filtergrid,.kpis{grid-template-columns:1fr}
+  .row{flex-direction:column}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ======================================================
-     ENCABEZADO
-====================================================== -->
-
 <header>
 
-  <img
-    src="LOGOMSPAS.png"
-    class="logo"
-    alt="Ministerio de Salud Pública y Asistencia Social - DDRISS"
-  >
+<img
+src="LOGOMSPAS.png"
+class="logo"
+alt="Ministerio de Salud Pública y Asistencia Social - DDRISS"
+>
 
-  <nav>
-    <a href="#inicio">Inicio</a>
-    <a href="#resumen">Resumen</a>
-    <a href="#estadistica">Estadística</a>
-    <a href="#expedientes">Expedientes</a>
-  </nav>
+<nav>
+<a href="#inicio">Inicio</a>
+<a href="#resumen">Resumen</a>
+<a href="#estadistica">Estadística</a>
+<a href="#expedientes">Expedientes</a>
+</nav>
 
 </header>
 
-
-<!-- ======================================================
-     TÍTULO
-====================================================== -->
-
 <section class="hero" id="inicio">
 
-  <div class="creador">
-    Creador: Ing. Lester Guillermo
-  </div>
+<div class="creador">
+Creador: Ing. Lester Guillermo
+</div>
 
-  <small>
-    SISTEMA DE OPINIONES TÉCNICAS DE CATEGORIZACIÓN
-  </small>
+<small>
+SISTEMA DE OPINIONES TÉCNICAS DE CATEGORIZACIÓN
+</small>
 
-  <h1>
-    Estadística del Departamento de Desarrollo de Redes Integradas de Servicios de Salud
-  </h1>
+<h1>
+Estadística del Departamento de Desarrollo de Redes Integradas de Servicios de Salud
+</h1>
 
-  <p>
-    Consulta y seguimiento de opiniones técnicas de categorización.
-  </p>
+<p>
+Consulta y seguimiento de opiniones técnicas de categorización.
+</p>
 
 </section>
 
-
 <main>
-
-<!-- ======================================================
-     BASE DE DATOS + BUSCADOR
-====================================================== -->
 
 <div class="grid2">
 
 <section class="card">
 
-  <div class="db-info">
+<div class="db-info">
 
-    <div class="db-title">
+<div class="db-title">
 
-      <h3>Base de datos oficial</h3>
+<h3>Base de datos oficial</h3>
 
-      <p class="sub">
-        Expedientes de Categorización
-      </p>
+<p class="sub">
+Expedientes de Categorización
+</p>
 
-      <div id="ultimaActualizacion" class="actualizacion">
-        Consultando información...
-      </div>
+<div id="ultimaActualizacion" class="actualizacion">
+Consultando información...
+</div>
 
-    </div>
+</div>
 
-    <button onclick="cargar()">
-      Actualizar información
-    </button>
+<button onclick="cargar()">
+Actualizar información
+</button>
 
-  </div>
+</div>
 
-  <div id="estado" class="status">
-    Conectando con Google Sheets...
-  </div>
+<div id="estado" class="status">
+Conectando con Google Sheets...
+</div>
 
 </section>
 
 
 <section class="card">
 
-  <h3>Buscar comunidad</h3>
+<h3>Buscar comunidad</h3>
 
-  <p class="sub">
-    <b>Busca únicamente en la columna COMUNIDAD.</b>
-    No busca proyecto, DMS, municipio ni DDRISS.
-  </p>
+<p class="sub">
+<b>Busca únicamente en la columna COMUNIDAD.</b>
+No busca proyecto, DMS, municipio ni DDRISS.
+</p>
 
-  <div class="row">
+<div class="row">
 
-    <input
-      id="buscar"
-      list="comunidades"
-      placeholder="Ejemplo: CABAÑAS, JOYA NEGRA..."
-    >
+<input
+id="buscar"
+list="comunidades"
+placeholder="Ejemplo: CABAÑAS, JOYA NEGRA..."
+>
 
-    <datalist id="comunidades"></datalist>
+<datalist id="comunidades"></datalist>
 
-    <button onclick="buscarComunidad()">
-      Buscar
-    </button>
+<button onclick="buscarComunidad()">
+Buscar
+</button>
 
-  </div>
+</div>
 
 </section>
 
 </div>
 
 
-<!-- ======================================================
-     RESULTADO DE BÚSQUEDA
-====================================================== -->
-
-<section
-  id="resultado"
-  class="card">
-</section>
+<section id="resultado" class="card"></section>
 
 
-<!-- ======================================================
-     FILTROS
-====================================================== -->
-
-<section
-  class="card filtros"
-  id="resumen">
+<section class="card filtros" id="resumen">
 
 <h3>Filtros del tablero</h3>
 
 <p class="sub">
-  Estos filtros son independientes del buscador superior.
+Estos filtros son independientes del buscador superior.
 </p>
 
 <div class="filtergrid">
@@ -681,19 +543,13 @@ footer{
 
 <div>
 <label>COMUNIDAD</label>
-<input
-  id="fcomunidad"
-  placeholder="Buscar comunidad">
+<input id="fcomunidad" placeholder="Buscar comunidad">
 </div>
 
 </div>
 
 </section>
 
-
-<!-- ======================================================
-     INDICADORES
-====================================================== -->
 
 <section class="kpis">
 
@@ -735,34 +591,21 @@ footer{
 </section>
 
 
-<!-- ======================================================
-     ESTADÍSTICA
-====================================================== -->
-
-<h2
-  id="estadistica"
-  class="section-title">
-  Estadística
+<h2 id="estadistica" class="section-title">
+Estadística
 </h2>
 
 
 <div class="charts">
 
 <section class="card chart">
-
 <h3>Expedientes por DDRISS</h3>
-
 <canvas id="cDDRISS"></canvas>
-
 </section>
 
-
 <section class="card chart">
-
 <h3>Opinión técnica</h3>
-
 <canvas id="cOpinion"></canvas>
-
 </section>
 
 </div>
@@ -771,49 +614,47 @@ footer{
 <div class="charts3">
 
 <section class="card chart">
-
 <h3>Tendencia mensual</h3>
-
 <canvas id="cMes"></canvas>
-
 </section>
 
-
 <section class="card chart">
-
 <h3>Tipo de proyecto</h3>
-
 <canvas id="cTipo"></canvas>
-
 </section>
 
-
 <section class="card chart">
-
 <h3>Fuente de financiamiento</h3>
-
 <canvas id="cFuente"></canvas>
-
 </section>
 
 </div>
 
 
-<!-- ======================================================
-     INFORMACIÓN CRUDA
-====================================================== -->
+<!-- LAS DOS GRÁFICAS NUEVAS -->
 
-<section
-  id="expedientes"
-  style="margin-top:30px">
+<div class="charts">
 
-<h2>
-  Información detallada
-</h2>
+<section class="card chart">
+<h3>Expedientes por técnico responsable</h3>
+<canvas id="cProfesional"></canvas>
+</section>
+
+<section class="card chart">
+<h3>Categorías solicitadas</h3>
+<canvas id="cCategoria"></canvas>
+</section>
+
+</div>
+
+
+<section id="expedientes" style="margin-top:30px">
+
+<h2>Información detallada</h2>
 
 <p class="sub">
-  Visualización de la información registrada en la base oficial.
-  No se habilita descarga desde esta página.
+Visualización de la información registrada en la base oficial.
+No se habilita descarga desde esta página.
 </p>
 
 <div class="card">
@@ -823,7 +664,6 @@ footer{
 <table>
 
 <thead id="thead"></thead>
-
 <tbody id="tbody"></tbody>
 
 </table>
@@ -836,7 +676,6 @@ footer{
 
 </main>
 
-
 <footer>
 Creador: Ing. Lester Guillermo
 </footer>
@@ -844,1726 +683,1284 @@ Creador: Ing. Lester Guillermo
 
 <script>
 
-/* =========================================================
-   CONEXIÓN OFICIAL CON GOOGLE APPS SCRIPT
-========================================================= */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyEDpdPxQn8gY08P5jIlPCJ6YyyIVnQcNd9Rax6_59EY_Ic2e0M2ECP-eaAdv8ZRFDTmw/exec";
 
 
-/* =========================================================
-   ESTRUCTURA A - AD
-
-   A  NO.
-   B  CÓDIGO
-   C  DDRISS
-   D  MUNICIPIO
-   E  DMS
-   F  COMUNIDAD
-   G  FECHA INGRESO
-   H  NOTA DDRISS
-   I  FECHA EGRESO
-   J  OFICIO EGRESO
-   K  TIPO DE PROYECTO
-   L  HABILITACIÓN
-   M  CATEGORIZACIÓN / RECATEGORIZACIÓN
-   N  PROYECTO
-   O  CATEGORÍA ACTUAL
-   P  CATEGORÍA SOLICITADA
-   Q  OPINIÓN
-   R  PRELIMINAR / DEFINITIVO
-   S  DEVUELTO
-   T  FUENTE DE FINANCIAMIENTO
-   U  POBLACIÓN DIRECTA
-   V  POBLACIÓN INDIRECTA
-   W  POBLACIÓN TOTAL
-   X  BRECHA QQ
-   Y  COSTO OBRA QQ
-   Z  COSTO TOTAL QQ
-   AA SNIP
-   AB DÍAS HÁBILES
-   AC PROFESIONAL
-   AD OBSERVACIONES
-========================================================= */
-
 const C = {
 
-  no:0,
-  codigo:1,
-  ddriss:2,
-  municipio:3,
-  dms:4,
-  comunidad:5,
-  ingreso:6,
-  nota:7,
-  egreso:8,
-  oficio:9,
-  tipo:10,
-  habilitacion:11,
-  categorizacion:12,
-  proyecto:13,
-  catActual:14,
-  catSolicita:15,
-  opinion:16,
-  preliminar:17,
-  devuelto:18,
-  fuente:19,
-  pobDirecta:20,
-  pobIndirecta:21,
-  pobTotal:22,
-  brecha:23,
-  costoObra:24,
-  costoTotal:25,
-  snip:26,
-  dias:27,
-  prof:28,
-  observaciones:29
+no:0,
+codigo:1,
+ddriss:2,
+municipio:3,
+dms:4,
+comunidad:5,
+ingreso:6,
+nota:7,
+egreso:8,
+oficio:9,
+tipo:10,
+habilitacion:11,
+categorizacion:12,
+proyecto:13,
+catActual:14,
+catSolicita:15,
+opinion:16,
+preliminar:17,
+devuelto:18,
+fuente:19,
+pobDirecta:20,
+pobIndirecta:21,
+pobTotal:22,
+brecha:23,
+costoObra:24,
+costoTotal:25,
+snip:26,
+dias:27,
+prof:28,
+observaciones:29
 
 };
 
 
-let DATA = [];
-let FILTRADOS = [];
-let CHARTS = {};
+let DATA=[];
+let FILTRADOS=[];
+let CHARTS={};
 
 
-/* =========================================================
-   UTILIDADES
-========================================================= */
+const t=v=>String(v??"").trim();
 
-const t = v =>
-String(v ?? "").trim();
-
-
-const n = v =>
+const n=v=>
 t(v)
 .normalize("NFD")
 .replace(/[\u0300-\u036f]/g,"")
 .toUpperCase();
 
 
-const num = v => {
+const num=v=>{
 
-  if(typeof v === "number"){
-    return v;
-  }
+if(typeof v==="number"){
+return v;
+}
 
-  let s = t(v)
-    .replace(/Q/gi,"")
-    .replace(/\$/g,"")
-    .replace(/\s/g,"")
-    .replace(/,/g,"");
+let s=t(v)
+.replace(/Q/gi,"")
+.replace(/\$/g,"")
+.replace(/\s/g,"")
+.replace(/,/g,"");
 
-  let x = Number(s);
+let x=Number(s);
 
-  return Number.isFinite(x) ? x : 0;
+return Number.isFinite(x)?x:0;
+
 };
 
 
-const esc = v =>
+const esc=v=>
 t(v).replace(
-  /[&<>"']/g,
-  x => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[x])
+/[&<>"']/g,
+x=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[x])
 );
 
 
-/* =========================================================
-   AÑO
-========================================================= */
-
 function year(r){
 
-  let valores = [
-    r[C.codigo],
-    r[C.ingreso],
-    r[C.egreso]
-  ];
+let valores=[
+r[C.codigo],
+r[C.ingreso],
+r[C.egreso]
+];
 
-  for(let valor of valores){
+for(let valor of valores){
 
-    let m = t(valor).match(/20\d{2}/);
+let m=t(valor).match(/20\d{2}/);
 
-    if(m){
-      return m[0];
-    }
-
-  }
-
-  let f = fecha(r[C.ingreso]);
-
-  if(f){
-    return String(f.getFullYear());
-  }
-
-  return "SIN AÑO";
+if(m){
+return m[0];
 }
 
+}
 
-/* =========================================================
-   FECHAS
-========================================================= */
+let f=fecha(r[C.ingreso]);
+
+if(f){
+return String(f.getFullYear());
+}
+
+return "SIN AÑO";
+
+}
+
 
 function fecha(v){
 
-  if(v instanceof Date){
-    return v;
-  }
-
-  let s = t(v);
-
-  if(!s){
-    return null;
-  }
-
-  let m =
-  s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-
-  if(m){
-
-    return new Date(
-      Number(m[3]),
-      Number(m[2])-1,
-      Number(m[1])
-    );
-
-  }
-
-  let d = new Date(s);
-
-  return isNaN(d.getTime())
-    ? null
-    : d;
+if(v instanceof Date){
+return v;
 }
 
+let s=t(v);
 
-/* =========================================================
-   CARGAR GOOGLE SHEETS
-========================================================= */
+if(!s){
+return null;
+}
+
+let m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+
+if(m){
+
+return new Date(
+Number(m[3]),
+Number(m[2])-1,
+Number(m[1])
+);
+
+}
+
+let d=new Date(s);
+
+return isNaN(d.getTime())?null:d;
+
+}
+
 
 async function cargar(){
 
-  const estado =
-  document.getElementById("estado");
+const estado=document.getElementById("estado");
 
-  estado.className = "status";
+estado.className="status";
 
-  estado.textContent =
-  "Actualizando información desde Google Sheets...";
+estado.textContent=
+"Actualizando información desde Google Sheets...";
 
+try{
 
-  try{
+const separador=
+API_URL.includes("?")?"&":"?";
 
-    const separador =
-    API_URL.includes("?") ? "&" : "?";
+const respuesta=
+await fetch(
+API_URL+
+separador+
+"t="+
+Date.now(),
+{
+method:"GET",
+cache:"no-store",
+redirect:"follow"
+}
+);
 
-    const respuesta =
-    await fetch(
-      API_URL +
-      separador +
-      "t=" +
-      Date.now(),
-      {
-        method:"GET",
-        cache:"no-store",
-        redirect:"follow"
-      }
-    );
+if(!respuesta.ok){
 
+throw new Error(
+"Respuesta HTTP "+
+respuesta.status
+);
 
-    if(!respuesta.ok){
+}
 
-      throw new Error(
-        "Respuesta HTTP " +
-        respuesta.status
-      );
+const texto=
+await respuesta.text();
 
-    }
+let json;
 
+try{
 
-    const texto =
-    await respuesta.text();
+json=JSON.parse(texto);
 
+}catch(error){
 
-    let json;
+console.error(
+"Respuesta recibida:",
+texto
+);
 
-    try{
+throw new Error(
+"Apps Script no devolvió JSON válido."
+);
 
-      json = JSON.parse(texto);
+}
 
-    }catch(error){
+let rows=[];
 
-      console.error(
-        "Respuesta recibida:",
-        texto
-      );
+if(Array.isArray(json)){
 
-      throw new Error(
-        "Apps Script no devolvió JSON válido."
-      );
+rows=json;
 
-    }
+}else if(
+json &&
+Array.isArray(json.data)
+){
 
+rows=json.data;
 
-    let rows = [];
+}else if(
+json &&
+Array.isArray(json.values)
+){
 
+rows=json.values;
 
-    if(Array.isArray(json)){
+}else if(
+json &&
+Array.isArray(json.rows)
+){
 
-      rows = json;
+rows=json.rows;
 
-    }else if(
-      json &&
-      Array.isArray(json.data)
-    ){
+}else{
 
-      rows = json.data;
+console.error(
+"JSON recibido:",
+json
+);
 
-    }else if(
-      json &&
-      Array.isArray(json.values)
-    ){
-
-      rows = json.values;
-
-    }else if(
-      json &&
-      Array.isArray(json.rows)
-    ){
-
-      rows = json.rows;
-
-    }else{
-
-      console.error(
-        "JSON recibido:",
-        json
-      );
-
-      throw new Error(
-        "El formato recibido desde Apps Script no contiene filas."
-      );
-
-    }
-
-
-    /*
-       Quitamos encabezado únicamente
-       cuando realmente parece encabezado.
-    */
-
-    if(rows.length){
-
-      const primera = rows[0];
-
-      if(
-        Array.isArray(primera) &&
-        (
-          n(primera[2]) === "DDRISS" ||
-          n(primera[5]) === "COMUNIDAD" ||
-          n(primera[13]) === "PROYECTO"
-        )
-      ){
-
-        rows = rows.slice(1);
-
-      }
-
-    }
-
-
-    DATA =
-    rows.filter(
-      fila =>
-      Array.isArray(fila) &&
-      fila.some(
-        celda => t(celda) !== ""
-      )
-    );
-
-
-    if(DATA.length === 0){
-
-      throw new Error(
-        "La conexión respondió, pero no se recibieron registros."
-      );
-
-    }
-
-
-    FILTRADOS = [...DATA];
-
-
-    estado.textContent =
-    "Base actualizada correctamente. " +
-    DATA.length.toLocaleString("es-GT") +
-    " expedientes cargados.";
-
-
-    estado.className =
-    "status ok";
-
-
-    const ahora =
-    new Date();
-
-
-    document.getElementById(
-      "ultimaActualizacion"
-    ).textContent =
-    "Última actualización: " +
-    ahora.toLocaleString(
-      "es-GT"
-    );
-
-
-    construirFiltros();
-
-    aplicar();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    estado.className =
-    "status error";
-
-    estado.textContent =
-    "No fue posible cargar la base: " +
-    error.message;
-
-  }
+throw new Error(
+"El formato recibido desde Apps Script no contiene filas."
+);
 
 }
 
 
-/* =========================================================
-   VALORES ÚNICOS
-========================================================= */
+if(rows.length){
+
+const primera=rows[0];
+
+if(
+Array.isArray(primera) &&
+(
+n(primera[2])==="DDRISS" ||
+n(primera[5])==="COMUNIDAD" ||
+n(primera[13])==="PROYECTO"
+)
+){
+
+rows=rows.slice(1);
+
+}
+
+}
+
+
+DATA=
+rows.filter(
+fila=>
+Array.isArray(fila) &&
+fila.some(
+celda=>t(celda)!==""
+)
+);
+
+
+if(DATA.length===0){
+
+throw new Error(
+"La conexión respondió, pero no se recibieron registros."
+);
+
+}
+
+
+FILTRADOS=[...DATA];
+
+estado.textContent=
+"Base actualizada correctamente. "+
+DATA.length.toLocaleString("es-GT")+
+" expedientes cargados.";
+
+estado.className="status ok";
+
+const ahora=new Date();
+
+document.getElementById(
+"ultimaActualizacion"
+).textContent=
+"Última actualización: "+
+ahora.toLocaleString("es-GT");
+
+construirFiltros();
+
+aplicar();
+
+}catch(error){
+
+console.error(error);
+
+estado.className="status error";
+
+estado.textContent=
+"No fue posible cargar la base: "+
+error.message;
+
+}
+
+}
+
 
 function unicos(indice){
 
-  return [
-    ...new Set(
-      DATA
-      .map(r => t(r[indice]))
-      .filter(Boolean)
-    )
-  ]
-  .sort(
-    (a,b) =>
-    a.localeCompare(
-      b,
-      "es",
-      {numeric:true}
-    )
-  );
+return [
+...new Set(
+DATA
+.map(r=>t(r[indice]))
+.filter(Boolean)
+)
+]
+.sort(
+(a,b)=>
+a.localeCompare(
+b,
+"es",
+{numeric:true}
+)
+);
 
 }
 
 
-/* =========================================================
-   SELECT
-========================================================= */
+function llenarSelect(id,valores,textoTodos){
 
-function llenarSelect(
-  id,
-  valores,
-  textoTodos
-){
+const elemento=
+document.getElementById(id);
 
-  const elemento =
-  document.getElementById(id);
-
-
-  elemento.innerHTML =
-  `<option value="">${textoTodos}</option>` +
-  valores
-  .map(
-    valor =>
-    `<option value="${esc(valor)}">${esc(valor)}</option>`
-  )
-  .join("");
+elemento.innerHTML=
+`<option value="">${textoTodos}</option>`+
+valores
+.map(
+valor=>
+`<option value="${esc(valor)}">${esc(valor)}</option>`
+)
+.join("");
 
 }
 
-
-/* =========================================================
-   CONSTRUIR FILTROS
-========================================================= */
 
 function construirFiltros(){
 
-  const anios =
-  [
-    ...new Set(
-      DATA
-      .map(year)
-      .filter(
-        x => x !== "SIN AÑO"
-      )
-    )
-  ]
-  .sort(
-    (a,b) => b-a
-  );
+const anios=[
+...new Set(
+DATA
+.map(year)
+.filter(
+x=>x!=="SIN AÑO"
+)
+)
+]
+.sort(
+(a,b)=>b-a
+);
 
 
-  llenarSelect(
-    "anio",
-    anios,
-    "Todos"
-  );
+llenarSelect("anio",anios,"Todos");
+llenarSelect("ddriss",unicos(C.ddriss),"Todas");
+llenarSelect("municipio",unicos(C.municipio),"Todos");
+llenarSelect("dms",unicos(C.dms),"Todos");
+llenarSelect("opinion",unicos(C.opinion),"Todas");
+llenarSelect("tipo",unicos(C.tipo),"Todos");
+llenarSelect("prof",unicos(C.prof),"Todos");
+llenarSelect("fuente",unicos(C.fuente),"Todas");
+llenarSelect("categoria",unicos(C.catSolicita),"Todas");
 
 
-  llenarSelect(
-    "ddriss",
-    unicos(C.ddriss),
-    "Todas"
-  );
+document.getElementById(
+"comunidades"
+).innerHTML=
+unicos(C.comunidad)
+.map(
+comunidad=>
+`<option value="${esc(comunidad)}"></option>`
+)
+.join("");
 
 
-  llenarSelect(
-    "municipio",
-    unicos(C.municipio),
-    "Todos"
-  );
+document
+.querySelectorAll(".filtros select")
+.forEach(
+elemento=>{
+elemento.onchange=aplicar;
+}
+);
 
 
-  llenarSelect(
-    "dms",
-    unicos(C.dms),
-    "Todos"
-  );
-
-
-  llenarSelect(
-    "opinion",
-    unicos(C.opinion),
-    "Todas"
-  );
-
-
-  llenarSelect(
-    "tipo",
-    unicos(C.tipo),
-    "Todos"
-  );
-
-
-  llenarSelect(
-    "prof",
-    unicos(C.prof),
-    "Todos"
-  );
-
-
-  llenarSelect(
-    "fuente",
-    unicos(C.fuente),
-    "Todas"
-  );
-
-
-  llenarSelect(
-    "categoria",
-    unicos(C.catSolicita),
-    "Todas"
-  );
-
-
-  document.getElementById(
-    "comunidades"
-  ).innerHTML =
-  unicos(C.comunidad)
-  .map(
-    comunidad =>
-    `<option value="${esc(comunidad)}"></option>`
-  )
-  .join("");
-
-
-  document
-  .querySelectorAll(
-    ".filtros select"
-  )
-  .forEach(
-    elemento => {
-
-      elemento.onchange =
-      aplicar;
-
-    }
-  );
-
-
-  document
-  .querySelectorAll(
-    ".filtros input"
-  )
-  .forEach(
-    elemento => {
-
-      elemento.oninput =
-      aplicar;
-
-      elemento.onchange =
-      aplicar;
-
-    }
-  );
+document
+.querySelectorAll(".filtros input")
+.forEach(
+elemento=>{
+elemento.oninput=aplicar;
+elemento.onchange=aplicar;
+}
+);
 
 }
 
-
-/* =========================================================
-   OBTENER VALOR
-========================================================= */
 
 function v(id){
 
-  return document
-  .getElementById(id)
-  .value;
+return document
+.getElementById(id)
+.value;
 
 }
 
-
-/* =========================================================
-   APLICAR FILTROS
-========================================================= */
 
 function aplicar(){
 
-  if(!DATA.length){
+if(!DATA.length){
 
-    FILTRADOS = [];
+FILTRADOS=[];
 
-    kpis();
-    tabla();
+kpis();
+tabla();
 
-    return;
-  }
-
-
-  const desde =
-  v("desde")
-  ? new Date(
-      v("desde") +
-      "T00:00:00"
-    )
-  : null;
-
-
-  const hasta =
-  v("hasta")
-  ? new Date(
-      v("hasta") +
-      "T23:59:59"
-    )
-  : null;
-
-
-  FILTRADOS =
-  DATA.filter(
-    r => {
-
-      const f =
-      fecha(
-        r[C.ingreso]
-      );
-
-
-      return (
-
-        (
-          !v("anio") ||
-          year(r) === v("anio")
-        )
-
-        &&
-
-        (
-          !v("ddriss") ||
-          n(r[C.ddriss]) ===
-          n(v("ddriss"))
-        )
-
-        &&
-
-        (
-          !v("municipio") ||
-          n(r[C.municipio]) ===
-          n(v("municipio"))
-        )
-
-        &&
-
-        (
-          !v("dms") ||
-          n(r[C.dms]) ===
-          n(v("dms"))
-        )
-
-        &&
-
-        (
-          !v("opinion") ||
-          n(r[C.opinion]) ===
-          n(v("opinion"))
-        )
-
-        &&
-
-        (
-          !v("tipo") ||
-          n(r[C.tipo]) ===
-          n(v("tipo"))
-        )
-
-        &&
-
-        (
-          !v("prof") ||
-          n(r[C.prof]) ===
-          n(v("prof"))
-        )
-
-        &&
-
-        (
-          !v("fuente") ||
-          n(r[C.fuente]) ===
-          n(v("fuente"))
-        )
-
-        &&
-
-        (
-          !v("categoria") ||
-          n(r[C.catSolicita]) ===
-          n(v("categoria"))
-        )
-
-        &&
-
-        (
-          !v("fcomunidad") ||
-          n(r[C.comunidad])
-          .includes(
-            n(v("fcomunidad"))
-          )
-        )
-
-        &&
-
-        (
-          !desde ||
-          (
-            f &&
-            f >= desde
-          )
-        )
-
-        &&
-
-        (
-          !hasta ||
-          (
-            f &&
-            f <= hasta
-          )
-        )
-
-      );
-
-    }
-  );
-
-
-  kpis();
-  graficas();
-  tabla();
+return;
 
 }
 
 
-/* =========================================================
-   KPI
-========================================================= */
+const desde=
+v("desde")
+?new Date(v("desde")+"T00:00:00")
+:null;
+
+
+const hasta=
+v("hasta")
+?new Date(v("hasta")+"T23:59:59")
+:null;
+
+
+FILTRADOS=
+DATA.filter(
+r=>{
+
+const f=fecha(r[C.ingreso]);
+
+return(
+
+(!v("anio") || year(r)===v("anio"))
+
+&&
+
+(!v("ddriss") ||
+n(r[C.ddriss])===n(v("ddriss")))
+
+&&
+
+(!v("municipio") ||
+n(r[C.municipio])===n(v("municipio")))
+
+&&
+
+(!v("dms") ||
+n(r[C.dms])===n(v("dms")))
+
+&&
+
+(!v("opinion") ||
+n(r[C.opinion])===n(v("opinion")))
+
+&&
+
+(!v("tipo") ||
+n(r[C.tipo])===n(v("tipo")))
+
+&&
+
+(!v("prof") ||
+n(r[C.prof])===n(v("prof")))
+
+&&
+
+(!v("fuente") ||
+n(r[C.fuente])===n(v("fuente")))
+
+&&
+
+(!v("categoria") ||
+n(r[C.catSolicita])===n(v("categoria")))
+
+&&
+
+(!v("fcomunidad") ||
+n(r[C.comunidad]).includes(
+n(v("fcomunidad"))
+))
+
+&&
+
+(!desde || (f && f>=desde))
+
+&&
+
+(!hasta || (f && f<=hasta))
+
+);
+
+}
+);
+
+
+kpis();
+graficas();
+tabla();
+
+}
+
 
 function kpis(){
 
-  let fav = 0;
-  let nofav = 0;
-  let pob = 0;
-  let dev = 0;
-  let snip = 0;
+let fav=0;
+let nofav=0;
+let pob=0;
+let dev=0;
+let snip=0;
 
 
-  FILTRADOS.forEach(
-    r => {
+FILTRADOS.forEach(
+r=>{
 
-      const opinion =
-      n(
-        r[C.opinion]
-      );
+const opinion=n(r[C.opinion]);
 
+if(opinion==="FAVORABLE"){
 
-      if(
-        opinion === "FAVORABLE"
-      ){
+fav++;
 
-        fav++;
+}else if(
+opinion.includes("NO FAVORABLE")
+){
 
-      }else if(
-        opinion.includes(
-          "NO FAVORABLE"
-        )
-      ){
-
-        nofav++;
-
-      }
-
-
-      pob +=
-      num(
-        r[C.pobTotal]
-      );
-
-
-      const devuelto =
-      n(
-        r[C.devuelto]
-      );
-
-
-      if(
-        devuelto &&
-        ![
-          "NO",
-          "0",
-          "N/A",
-          "NA"
-        ].includes(
-          devuelto
-        )
-      ){
-
-        dev++;
-
-      }
-
-
-      const snipValor =
-      n(
-        r[C.snip]
-      );
-
-
-      if(
-        snipValor &&
-        ![
-          "0",
-          "NO",
-          "NA",
-          "N/A"
-        ].includes(
-          snipValor
-        )
-      ){
-
-        snip++;
-
-      }
-
-    }
-  );
-
-
-  const pendientes =
-  FILTRADOS.length -
-  fav -
-  nofav;
-
-
-  document.getElementById(
-    "ktotal"
-  ).textContent =
-  FILTRADOS.length
-  .toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "kfav"
-  ).textContent =
-  fav.toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "knofav"
-  ).textContent =
-  nofav.toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "kpend"
-  ).textContent =
-  pendientes.toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "kpob"
-  ).textContent =
-  Math.round(pob)
-  .toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "kdev"
-  ).textContent =
-  dev.toLocaleString(
-    "es-GT"
-  );
-
-
-  document.getElementById(
-    "ksnip"
-  ).textContent =
-  snip.toLocaleString(
-    "es-GT"
-  );
+nofav++;
 
 }
 
 
-/* =========================================================
-   CONTEO PARA GRÁFICAS
-========================================================= */
+pob+=num(r[C.pobTotal]);
+
+
+const devuelto=n(r[C.devuelto]);
+
+if(
+devuelto &&
+!["NO","0","N/A","NA"].includes(devuelto)
+){
+
+dev++;
+
+}
+
+
+const snipValor=n(r[C.snip]);
+
+if(
+snipValor &&
+!["0","NO","NA","N/A"].includes(snipValor)
+){
+
+snip++;
+
+}
+
+}
+);
+
+
+const pendientes=
+FILTRADOS.length-
+fav-
+nofav;
+
+
+document.getElementById("ktotal").textContent=
+FILTRADOS.length.toLocaleString("es-GT");
+
+document.getElementById("kfav").textContent=
+fav.toLocaleString("es-GT");
+
+document.getElementById("knofav").textContent=
+nofav.toLocaleString("es-GT");
+
+document.getElementById("kpend").textContent=
+pendientes.toLocaleString("es-GT");
+
+document.getElementById("kpob").textContent=
+Math.round(pob).toLocaleString("es-GT");
+
+document.getElementById("kdev").textContent=
+dev.toLocaleString("es-GT");
+
+document.getElementById("ksnip").textContent=
+snip.toLocaleString("es-GT");
+
+}
+
 
 function conteo(indice){
 
-  const resultado = {};
+const resultado={};
 
+FILTRADOS.forEach(
+r=>{
 
-  FILTRADOS.forEach(
-    r => {
+const clave=
+t(r[indice])||
+"SIN DATO";
 
-      const clave =
-      t(r[indice]) ||
-      "SIN DATO";
+resultado[clave]=
+(resultado[clave]||0)+1;
 
+}
+);
 
-      resultado[clave] =
-      (
-        resultado[clave] ||
-        0
-      ) + 1;
-
-    }
-  );
-
-
-  return Object
-  .entries(resultado)
-  .sort(
-    (a,b) =>
-    b[1] - a[1]
-  );
+return Object
+.entries(resultado)
+.sort(
+(a,b)=>b[1]-a[1]
+);
 
 }
 
-
-/* =========================================================
-   CREAR GRÁFICA
-========================================================= */
 
 function crearChart(
-  id,
-  tipo,
-  labels,
-  datos
+id,
+tipo,
+labels,
+datos
 ){
 
-  if(
-    typeof Chart ===
-    "undefined"
-  ){
+if(typeof Chart==="undefined"){
+return;
+}
 
-    return;
+if(CHARTS[id]){
+CHARTS[id].destroy();
+}
 
-  }
+const canvas=
+document.getElementById(id);
 
+if(!canvas){
+return;
+}
 
-  if(
-    CHARTS[id]
-  ){
+CHARTS[id]=
+new Chart(
+canvas,
+{
 
-    CHARTS[id]
-    .destroy();
+type:tipo,
 
-  }
+data:{
 
+labels:labels,
 
-  const canvas =
-  document.getElementById(id);
+datasets:[
+{
 
+data:datos,
 
-  CHARTS[id] =
-  new Chart(
-    canvas,
-    {
+label:"Expedientes",
 
-      type:tipo,
+borderWidth:2
 
-      data:{
+}
+]
 
-        labels:labels,
+},
 
-        datasets:[
-          {
+options:{
 
-            data:datos,
+responsive:true,
 
-            label:"Expedientes",
+maintainAspectRatio:false,
 
-            borderWidth:2
+plugins:{
 
-          }
-        ]
+legend:{
 
-      },
-
-      options:{
-
-        responsive:true,
-
-        maintainAspectRatio:false,
-
-        plugins:{
-
-          legend:{
-
-            display:
-            tipo ===
-            "doughnut"
-
-          }
-
-        },
-
-        scales:
-        tipo ===
-        "doughnut"
-        ? {}
-        : {
-
-            y:{
-              beginAtZero:true,
-              ticks:{
-                precision:0
-              }
-            }
-
-          }
-
-      }
-
-    }
-  );
+display:
+tipo==="doughnut"
 
 }
 
+},
 
-/* =========================================================
-   GRÁFICAS
-========================================================= */
+scales:
+tipo==="doughnut"
+?{}
+:{
+
+y:{
+beginAtZero:true,
+ticks:{
+precision:0
+}
+}
+
+}
+
+}
+
+}
+);
+
+}
+
 
 function graficas(){
 
-  const porDDRISS =
-  conteo(
-    C.ddriss
-  );
+const porDDRISS=
+conteo(C.ddriss);
+
+crearChart(
+"cDDRISS",
+"bar",
+porDDRISS.map(x=>x[0]),
+porDDRISS.map(x=>x[1])
+);
 
 
-  crearChart(
-    "cDDRISS",
-    "bar",
-    porDDRISS.map(
-      x => x[0]
-    ),
-    porDDRISS.map(
-      x => x[1]
-    )
-  );
+let fav=0;
+let nofav=0;
+let pendiente=0;
 
 
-  let fav = 0;
-  let nofav = 0;
-  let pendiente = 0;
+FILTRADOS.forEach(
+r=>{
 
+const o=n(r[C.opinion]);
 
-  FILTRADOS.forEach(
-    r => {
+if(o==="FAVORABLE"){
 
-      const o =
-      n(
-        r[C.opinion]
-      );
+fav++;
 
+}else if(
+o.includes("NO FAVORABLE")
+){
 
-      if(
-        o ===
-        "FAVORABLE"
-      ){
+nofav++;
 
-        fav++;
+}else{
 
-      }else if(
-        o.includes(
-          "NO FAVORABLE"
-        )
-      ){
-
-        nofav++;
-
-      }else{
-
-        pendiente++;
-
-      }
-
-    }
-  );
-
-
-  crearChart(
-    "cOpinion",
-    "doughnut",
-    [
-      "Favorable",
-      "No favorable",
-      "Pendiente / sin dato"
-    ],
-    [
-      fav,
-      nofav,
-      pendiente
-    ]
-  );
-
-
-  const meses =
-  Array(12).fill(0);
-
-
-  FILTRADOS.forEach(
-    r => {
-
-      const f =
-      fecha(
-        r[C.ingreso]
-      );
-
-
-      if(f){
-
-        meses[
-          f.getMonth()
-        ]++;
-
-      }
-
-    }
-  );
-
-
-  crearChart(
-    "cMes",
-    "line",
-    [
-      "Ene",
-      "Feb",
-      "Mar",
-      "Abr",
-      "May",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dic"
-    ],
-    meses
-  );
-
-
-  const porTipo =
-  conteo(
-    C.tipo
-  );
-
-
-  crearChart(
-    "cTipo",
-    "bar",
-    porTipo.map(
-      x => x[0]
-    ),
-    porTipo.map(
-      x => x[1]
-    )
-  );
-
-
-  const porFuente =
-  conteo(
-    C.fuente
-  );
-
-
-  crearChart(
-    "cFuente",
-    "bar",
-    porFuente.map(
-      x => x[0]
-    ),
-    porFuente.map(
-      x => x[1]
-    )
-  );
+pendiente++;
 
 }
 
+}
+);
 
-/* =========================================================
-   BUSCADOR
-   EXCLUSIVAMENTE COLUMNA F = COMUNIDAD
-========================================================= */
+
+crearChart(
+"cOpinion",
+"doughnut",
+[
+"Favorable",
+"No favorable",
+"Pendiente / sin dato"
+],
+[
+fav,
+nofav,
+pendiente
+]
+);
+
+
+const meses=
+Array(12).fill(0);
+
+
+FILTRADOS.forEach(
+r=>{
+
+const f=fecha(r[C.ingreso]);
+
+if(f){
+meses[f.getMonth()]++;
+}
+
+}
+);
+
+
+crearChart(
+"cMes",
+"line",
+[
+"Ene",
+"Feb",
+"Mar",
+"Abr",
+"May",
+"Jun",
+"Jul",
+"Ago",
+"Sep",
+"Oct",
+"Nov",
+"Dic"
+],
+meses
+);
+
+
+const porTipo=
+conteo(C.tipo);
+
+crearChart(
+"cTipo",
+"bar",
+porTipo.map(x=>x[0]),
+porTipo.map(x=>x[1])
+);
+
+
+const porFuente=
+conteo(C.fuente);
+
+crearChart(
+"cFuente",
+"bar",
+porFuente.map(x=>x[0]),
+porFuente.map(x=>x[1])
+);
+
+
+/* NUEVA GRÁFICA: TÉCNICO RESPONSABLE */
+
+const porProfesional=
+conteo(C.prof);
+
+crearChart(
+"cProfesional",
+"bar",
+porProfesional.map(x=>x[0]),
+porProfesional.map(x=>x[1])
+);
+
+
+/* NUEVA GRÁFICA: CATEGORÍAS SOLICITADAS */
+
+const porCategoria=
+conteo(C.catSolicita);
+
+crearChart(
+"cCategoria",
+"bar",
+porCategoria.map(x=>x[0]),
+porCategoria.map(x=>x[1])
+);
+
+}
+
 
 function buscarComunidad(){
 
-  const textoBusqueda =
-  v("buscar");
+const textoBusqueda=
+v("buscar");
 
+const q=
+n(textoBusqueda);
 
-  const q =
-  n(
-    textoBusqueda
-  );
+if(!q){
 
+alert(
+"Escriba el nombre de una comunidad."
+);
 
-  if(!q){
-
-    alert(
-      "Escriba el nombre de una comunidad."
-    );
-
-    return;
-
-  }
-
-
-  /*
-     IMPORTANTE:
-     SOLO BUSCA EN C.comunidad
-     C.comunidad = índice 5 = columna F
-  */
-
-  const resultados =
-  DATA.filter(
-    fila =>
-    n(
-      fila[C.comunidad]
-    ).includes(q)
-  );
-
-
-  const box =
-  document.getElementById(
-    "resultado"
-  );
-
-
-  box.style.display =
-  "block";
-
-
-  box.innerHTML = `
-
-  <div
-    style="
-      display:flex;
-      justify-content:space-between;
-      gap:20px;
-      align-items:flex-start;
-    "
-  >
-
-    <div>
-
-      <h3>
-        Historial:
-        ${esc(textoBusqueda)}
-      </h3>
-
-      <p class="sub">
-
-        ${resultados.length.toLocaleString("es-GT")}
-        registros encontrados exclusivamente
-        en la columna COMUNIDAD.
-
-        Esta búsqueda no modifica
-        las gráficas ni los filtros
-        del tablero.
-
-      </p>
-
-    </div>
-
-    <b
-      style="
-        font-size:34px;
-        color:#17364c;
-      "
-    >
-
-      ${resultados.length.toLocaleString("es-GT")}
-
-    </b>
-
-  </div>
-
-
-  <div class="tablebox">
-
-  <table>
-
-  <thead>
-
-  <tr>
-
-  <th>Año</th>
-  <th>DDRISS</th>
-  <th>Municipio</th>
-  <th>DMS</th>
-  <th>Comunidad</th>
-  <th>Proyecto</th>
-  <th>Opinión</th>
-  <th>Profesional</th>
-  <th>Fecha ingreso</th>
-  <th>Oficio</th>
-
-  </tr>
-
-  </thead>
-
-  <tbody>
-
-  ${
-    resultados.length
-
-    ?
-
-    resultados
-    .map(
-      x => `
-
-      <tr>
-
-      <td>
-      ${esc(year(x))}
-      </td>
-
-      <td>
-      ${esc(x[C.ddriss])}
-      </td>
-
-      <td>
-      ${esc(x[C.municipio])}
-      </td>
-
-      <td>
-      ${esc(x[C.dms])}
-      </td>
-
-      <td>
-      <b>
-      ${esc(x[C.comunidad])}
-      </b>
-      </td>
-
-      <td>
-      ${esc(x[C.proyecto])}
-      </td>
-
-      <td>
-      ${badge(x[C.opinion])}
-      </td>
-
-      <td>
-      ${esc(x[C.prof])}
-      </td>
-
-      <td>
-      ${esc(x[C.ingreso])}
-      </td>
-
-      <td>
-      ${esc(x[C.oficio])}
-      </td>
-
-      </tr>
-
-      `
-    )
-    .join("")
-
-    :
-
-    `
-
-    <tr>
-
-    <td
-      colspan="10"
-      style="
-        text-align:center;
-        padding:30px;
-      "
-    >
-
-    No se encontraron registros
-    para esa comunidad.
-
-    </td>
-
-    </tr>
-
-    `
-
-  }
-
-  </tbody>
-
-  </table>
-
-  </div>
-
-  `;
-
-
-  box.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
+return;
 
 }
 
 
-/* =========================================================
-   COLUMNAS DE INFORMACIÓN DETALLADA
-   A Y B NO SE MUESTRAN
-========================================================= */
+const resultados=
+DATA.filter(
+fila=>
+n(
+fila[C.comunidad]
+).includes(q)
+);
 
-const COLS = [
+
+const box=
+document.getElementById(
+"resultado"
+);
+
+
+box.style.display=
+"block";
+
+
+box.innerHTML=`
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+gap:20px;
+align-items:flex-start;
+"
+>
+
+<div>
+
+<h3>
+Historial:
+${esc(textoBusqueda)}
+</h3>
+
+<p class="sub">
+
+${resultados.length.toLocaleString("es-GT")}
+registros encontrados exclusivamente
+en la columna COMUNIDAD.
+
+Esta búsqueda no modifica
+las gráficas ni los filtros
+del tablero.
+
+</p>
+
+</div>
+
+<b
+style="
+font-size:34px;
+color:#17364c;
+"
+>
+
+${resultados.length.toLocaleString("es-GT")}
+
+</b>
+
+</div>
+
+
+<div class="tablebox">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Año</th>
+<th>DDRISS</th>
+<th>Municipio</th>
+<th>DMS</th>
+<th>Comunidad</th>
+<th>Proyecto</th>
+<th>Opinión</th>
+<th>Profesional</th>
+<th>Fecha ingreso</th>
+<th>Oficio</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+resultados.length
+
+?
+
+resultados
+.map(
+x=>`
+
+<tr>
+
+<td>${esc(year(x))}</td>
+
+<td>${esc(x[C.ddriss])}</td>
+
+<td>${esc(x[C.municipio])}</td>
+
+<td>${esc(x[C.dms])}</td>
+
+<td>
+<b>${esc(x[C.comunidad])}</b>
+</td>
+
+<td>${esc(x[C.proyecto])}</td>
+
+<td>${badge(x[C.opinion])}</td>
+
+<td>${esc(x[C.prof])}</td>
+
+<td>${esc(x[C.ingreso])}</td>
+
+<td>${esc(x[C.oficio])}</td>
+
+</tr>
+
+`
+)
+.join("")
+
+:
+
+`
+
+<tr>
+
+<td
+colspan="10"
+style="
+text-align:center;
+padding:30px;
+"
+>
+
+No se encontraron registros
+para esa comunidad.
+
+</td>
+
+</tr>
+
+`
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+
+box.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+
+const COLS=[
 
 ["DDRISS",2],
-
 ["MUNICIPIO",3],
-
 ["DMS",4],
-
 ["COMUNIDAD",5],
-
 ["FECHA INGRESO",6],
-
 ["NOTA DDRISS",7],
-
 ["FECHA EGRESO",8],
-
 ["OFICIO EGRESO",9],
-
 ["TIPO DE PROYECTO",10],
-
 ["HABILITACIÓN",11],
-
 ["CATEGORIZACIÓN / RECATEGORIZACIÓN",12],
-
 ["PROYECTO",13],
-
 ["CATEGORÍA ACTUAL",14],
-
 ["CATEGORÍA SOLICITADA",15],
-
 ["OPINIÓN",16],
-
 ["PRELIMINAR / DEFINITIVO",17],
-
 ["DEVUELTO",18],
-
 ["FUENTE DE FINANCIAMIENTO",19],
-
 ["POBLACIÓN DIRECTA",20],
-
 ["POBLACIÓN INDIRECTA",21],
-
 ["POBLACIÓN TOTAL",22],
-
 ["BRECHA QQ",23],
-
 ["COSTO OBRA QQ",24],
-
 ["COSTO TOTAL QQ",25],
-
 ["SNIP",26],
-
 ["DÍAS HÁBILES",27],
-
 ["PROFESIONAL",28],
-
 ["OBSERVACIONES",29]
 
 ];
 
 
-/* =========================================================
-   BADGE OPINIÓN
-========================================================= */
-
 function badge(opinion){
 
-  const texto =
-  n(opinion);
+const texto=
+n(opinion);
 
+let clase=
+"pend";
 
-  let clase =
-  "pend";
+if(
+texto==="FAVORABLE"
+){
 
+clase="fav";
 
-  if(
-    texto ===
-    "FAVORABLE"
-  ){
+}else if(
+texto.includes("NO FAVORABLE")
+){
 
-    clase =
-    "fav";
-
-  }else if(
-    texto.includes(
-      "NO FAVORABLE"
-    )
-  ){
-
-    clase =
-    "nofav";
-
-  }
-
-
-  return `
-
-  <span
-    class="badge ${clase}"
-  >
-
-  ${
-    esc(opinion) ||
-    "SIN DATO"
-  }
-
-  </span>
-
-  `;
+clase="nofav";
 
 }
 
 
-/* =========================================================
-   TABLA INFORMACIÓN CRUDA
-========================================================= */
+return `
+
+<span class="badge ${clase}">
+
+${esc(opinion)||"SIN DATO"}
+
+</span>
+
+`;
+
+}
+
 
 function tabla(){
 
-  const thead =
-  document.getElementById(
-    "thead"
-  );
+const thead=
+document.getElementById(
+"thead"
+);
+
+const tbody=
+document.getElementById(
+"tbody"
+);
 
 
-  const tbody =
-  document.getElementById(
-    "tbody"
-  );
+thead.innerHTML=
+
+"<tr>"+
+
+COLS
+.map(
+columna=>
+`<th>${columna[0]}</th>`
+)
+.join("")
+
++
+
+"</tr>";
 
 
-  thead.innerHTML =
+if(!FILTRADOS.length){
 
-  "<tr>" +
+tbody.innerHTML=`
 
-  COLS
-  .map(
-    columna =>
-    `<th>${columna[0]}</th>`
-  )
-  .join("")
+<tr>
 
-  +
+<td
+colspan="${COLS.length}"
+style="
+text-align:center;
+padding:30px;
+"
+>
 
-  "</tr>";
+No hay registros para mostrar.
 
+</td>
 
-  if(
-    !FILTRADOS.length
-  ){
+</tr>
 
-    tbody.innerHTML = `
+`;
 
-    <tr>
-
-      <td
-        colspan="${COLS.length}"
-        style="
-          text-align:center;
-          padding:30px;
-        "
-      >
-
-      No hay registros para mostrar.
-
-      </td>
-
-    </tr>
-
-    `;
-
-    return;
-
-  }
-
-
-  tbody.innerHTML =
-
-  FILTRADOS
-
-  .map(
-    fila => {
-
-      return (
-
-        "<tr>" +
-
-        COLS
-
-        .map(
-          columna => {
-
-            const indice =
-            columna[1];
-
-
-            if(
-              indice ===
-              C.opinion
-            ){
-
-              return (
-                "<td>" +
-                badge(
-                  fila[indice]
-                ) +
-                "</td>"
-              );
-
-            }
-
-
-            return (
-              "<td>" +
-              esc(
-                fila[indice]
-              ) +
-              "</td>"
-            );
-
-          }
-        )
-
-        .join("")
-
-        +
-
-        "</tr>"
-
-      );
-
-    }
-  )
-
-  .join("");
+return;
 
 }
 
 
-/* =========================================================
-   ENTER EN BUSCADOR
-========================================================= */
+tbody.innerHTML=
+
+FILTRADOS
+
+.map(
+fila=>{
+
+return(
+
+"<tr>"+
+
+COLS
+
+.map(
+columna=>{
+
+const indice=
+columna[1];
+
+if(
+indice===
+C.opinion
+){
+
+return(
+"<td>"+
+badge(
+fila[indice]
+)+
+"</td>"
+);
+
+}
+
+return(
+"<td>"+
+esc(
+fila[indice]
+)+
+"</td>"
+);
+
+}
+)
+
+.join("")
+
++
+
+"</tr>"
+
+);
+
+}
+)
+
+.join("");
+
+}
+
 
 document
 .getElementById("buscar")
 .addEventListener(
-  "keydown",
-  function(event){
+"keydown",
+function(event){
 
-    if(
-      event.key ===
-      "Enter"
-    ){
+if(
+event.key==="Enter"
+){
 
-      buscarComunidad();
+buscarComunidad();
 
-    }
+}
 
-  }
+}
 );
 
 
-/* =========================================================
-   CARGA AUTOMÁTICA
-
-   Cada vez que alguien abre o recarga la página,
-   vuelve a consultar Apps Script.
-   Por lo tanto, los cambios realizados en Google Sheets
-   se reflejan sin tener que modificar GitHub.
-========================================================= */
-
 window.addEventListener(
-  "DOMContentLoaded",
-  function(){
+"DOMContentLoaded",
+function(){
 
-    cargar();
+cargar();
 
-  }
+}
 );
 
 </script>
