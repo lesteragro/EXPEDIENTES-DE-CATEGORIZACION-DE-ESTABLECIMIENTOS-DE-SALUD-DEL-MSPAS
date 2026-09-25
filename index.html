@@ -3,544 +3,2570 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Sistema de Opiniones Técnicas de Categorización</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root{--azul:#07527f;--celeste:#078dcc;--fondo:#eef6fa;--texto:#17364c;--gris:#6d8494;--borde:#d5e3eb;--verde:#14895f;--rojo:#c44054;--amarillo:#d89a21}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--fondo);color:var(--texto)}
-header{height:190px;background:white;display:flex;align-items:center;justify-content:space-between;padding:20px 4%}
-.logo{max-width:600px;max-height:155px;width:auto;height:auto;object-fit:contain}
-nav{display:flex;gap:28px}nav a{text-decoration:none;color:#536c7e;font-weight:700}
-.hero{background:linear-gradient(100deg,#07517e,#078bc9 70%,#25a9d4);color:white;padding:35px 4%}
-.hero small{font-weight:900;letter-spacing:2px}.hero h1{font-size:38px;margin:9px 0 5px}.hero p{margin:0}
-main{width:94%;max-width:1800px;margin:auto;padding:25px 0 60px}
-.grid2{display:grid;grid-template-columns:.85fr 1.15fr;gap:18px}
-.card{background:white;border:1px solid var(--borde);border-radius:16px;padding:20px;box-shadow:0 8px 25px #16445e0d}
-.card h3{margin:0 0 7px}.sub{font-size:13px;color:var(--gris)}
-.row{display:flex;gap:10px}
-input,select{width:100%;padding:11px;border:1px solid #c8dce8;border-radius:9px;background:#fff}
-button{padding:11px 18px;border:0;border-radius:9px;background:var(--celeste);color:white;font-weight:800;cursor:pointer}
-.status{margin-top:12px;padding:10px;border-radius:8px;background:#fff1cf;color:#8a5900;font-size:13px}
-#resultado{display:none;margin-top:18px}
-.filtros{margin-top:18px}.filtergrid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px}
-label{display:block;font-size:10px;font-weight:900;color:#6c8291;margin-bottom:5px}
-.kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:11px;margin:18px 0}
-.kpi{background:white;border:1px solid var(--borde);border-left:5px solid var(--celeste);border-radius:13px;padding:15px}
-.kpi.green{border-left-color:var(--verde)}.kpi.red{border-left-color:var(--rojo)}.kpi.yellow{border-left-color:var(--amarillo)}
-.kpi small{font-weight:900;color:#6c8291}.kpi b{display:block;font-size:28px;margin-top:14px}
-.charts{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}
-.charts3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
-.chart{height:370px}.chart canvas{max-height:300px}
-.tablebox{overflow:auto;max-height:620px;border:1px solid var(--borde);border-radius:12px}
-table{border-collapse:collapse;width:100%;min-width:1500px;font-size:12px}
-th{position:sticky;top:0;background:#e8f4fa;padding:11px;text-align:left;color:#17445e}
-td{padding:10px;border-top:1px solid #e5edf2}
-.badge{padding:4px 8px;border-radius:20px;font-weight:800;font-size:10px}.fav{background:#def3e9;color:#087241}.nofav{background:#f9e1e5;color:#a62e42}.pend{background:#fff0d0;color:#936000}
-footer{text-align:center;padding:25px;color:#788e9e;font-size:12px}
-@media(max-width:1100px){.filtergrid{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(4,1fr)}.charts,.charts3{grid-template-columns:1fr}}
-@media(max-width:700px){header{height:auto;flex-direction:column;align-items:flex-start}.logo{width:100%;max-height:none}.grid2{grid-template-columns:1fr}.filtergrid{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.hero h1{font-size:29px}}
+:root{
+  --azul:#07527f;
+  --azul2:#086d9f;
+  --celeste:#078dcc;
+  --celeste2:#25a9d4;
+  --fondo:#eef6fa;
+  --texto:#17364c;
+  --gris:#6d8494;
+  --borde:#d5e3eb;
+  --verde:#14895f;
+  --rojo:#c44054;
+  --amarillo:#d89a21;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--fondo);
+  color:var(--texto);
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+header{
+  min-height:180px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 4%;
+  gap:30px;
+}
+
+.logo{
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:520px;
+  max-height:145px;
+  object-fit:contain;
+}
+
+nav{
+  display:flex;
+  gap:28px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+nav a{
+  text-decoration:none;
+  color:#536c7e;
+  font-weight:700;
+  font-size:15px;
+}
+
+nav a:hover{
+  color:var(--celeste);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  background:linear-gradient(
+    100deg,
+    #07517e,
+    #078bc9 70%,
+    #25a9d4
+  );
+  color:#fff;
+  padding:34px 4% 38px;
+}
+
+.creador{
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:14px;
+  opacity:.92;
+}
+
+.hero small{
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.hero h1{
+  font-size:38px;
+  line-height:1.12;
+  margin:9px 0 6px;
+  max-width:1500px;
+}
+
+.hero p{
+  margin:0;
+  font-size:16px;
+}
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+main{
+  width:94%;
+  max-width:1800px;
+  margin:auto;
+  padding:26px 0 60px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:.85fr 1.15fr;
+  gap:18px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 8px 25px rgba(22,68,94,.05);
+}
+
+.card h3{
+  margin:0 0 7px;
+}
+
+.sub{
+  font-size:13px;
+  color:var(--gris);
+  line-height:1.5;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+/* =========================================================
+   CAMPOS Y BOTONES
+========================================================= */
+
+input,
+select{
+  width:100%;
+  padding:11px;
+  border:1px solid #c8dce8;
+  border-radius:9px;
+  background:#fff;
+  color:var(--texto);
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--celeste);
+  box-shadow:0 0 0 3px rgba(7,141,204,.10);
+}
+
+button{
+  padding:11px 18px;
+  border:0;
+  border-radius:9px;
+  background:var(--celeste);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+button:hover{
+  background:#067db4;
+}
+
+.status{
+  margin-top:12px;
+  padding:11px;
+  border-radius:8px;
+  background:#fff1cf;
+  color:#8a5900;
+  font-size:13px;
+}
+
+.status.ok{
+  background:#e3f5eb;
+  color:#087342;
+}
+
+.status.error{
+  background:#fbe5e8;
+  color:#a62e42;
+}
+
+/* =========================================================
+   RESULTADO BUSCADOR
+========================================================= */
+
+#resultado{
+  display:none;
+  margin-top:18px;
+}
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.filtros{
+  margin-top:18px;
+}
+
+.filtergrid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:11px;
+}
+
+label{
+  display:block;
+  font-size:10px;
+  font-weight:900;
+  color:#6c8291;
+  margin-bottom:5px;
+}
+
+/* =========================================================
+   KPI
+========================================================= */
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:11px;
+  margin:18px 0;
+}
+
+.kpi{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-left:5px solid var(--celeste);
+  border-radius:13px;
+  padding:15px;
+}
+
+.kpi.green{
+  border-left-color:var(--verde);
+}
+
+.kpi.red{
+  border-left-color:var(--rojo);
+}
+
+.kpi.yellow{
+  border-left-color:var(--amarillo);
+}
+
+.kpi small{
+  font-weight:900;
+  color:#6c8291;
+}
+
+.kpi b{
+  display:block;
+  font-size:28px;
+  margin-top:14px;
+}
+
+/* =========================================================
+   GRÁFICAS
+========================================================= */
+
+.section-title{
+  margin:30px 0 14px;
+  font-size:28px;
+}
+
+.charts{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.charts3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:18px;
+}
+
+.chart{
+  height:390px;
+}
+
+.chart canvas{
+  max-height:315px;
+}
+
+/* =========================================================
+   TABLAS
+========================================================= */
+
+.tablebox{
+  overflow:auto;
+  max-height:650px;
+  border:1px solid var(--borde);
+  border-radius:12px;
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:1700px;
+  font-size:12px;
+}
+
+th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#e8f4fa;
+  padding:11px;
+  text-align:left;
+  color:#17445e;
+  white-space:nowrap;
+}
+
+td{
+  padding:10px;
+  border-top:1px solid #e5edf2;
+  vertical-align:top;
+}
+
+tbody tr:hover{
+  background:#f8fcfe;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  font-weight:800;
+  font-size:10px;
+  white-space:nowrap;
+}
+
+.fav{
+  background:#def3e9;
+  color:#087241;
+}
+
+.nofav{
+  background:#f9e1e5;
+  color:#a62e42;
+}
+
+.pend{
+  background:#fff0d0;
+  color:#936000;
+}
+
+/* =========================================================
+   INFORMACIÓN DE CARGA
+========================================================= */
+
+.db-info{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.db-title{
+  flex:1;
+}
+
+.actualizacion{
+  margin-top:5px;
+  color:var(--gris);
+  font-size:12px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+  text-align:center;
+  padding:25px;
+  color:#788e9e;
+  font-size:12px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1200px){
+
+  .filtergrid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .kpis{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .charts,
+  .charts3{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:800px){
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+    min-height:auto;
+  }
+
+  .logo{
+    max-width:100%;
+    max-height:none;
+  }
+
+  nav{
+    gap:15px;
+  }
+
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .filtergrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .kpis{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+}
+
+@media(max-width:520px){
+
+  .filtergrid,
+  .kpis{
+    grid-template-columns:1fr;
+  }
+
+  .row{
+    flex-direction:column;
+  }
+}
 </style>
 </head>
 
 <body>
 
+<!-- ======================================================
+     ENCABEZADO
+====================================================== -->
+
 <header>
-<img src="LOGOMSPAS.png" class="logo" alt="MSPAS DDRISS">
-<nav>
-<a href="#inicio">Inicio</a>
-<a href="#resumen">Resumen</a>
-<a href="#estadistica">Estadística</a>
-<a href="#expedientes">Expedientes</a>
-</nav>
+
+  <img
+    src="LOGOMSPAS.png"
+    class="logo"
+    alt="Ministerio de Salud Pública y Asistencia Social - DDRISS"
+  >
+
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#resumen">Resumen</a>
+    <a href="#estadistica">Estadística</a>
+    <a href="#expedientes">Expedientes</a>
+  </nav>
+
 </header>
 
+
+<!-- ======================================================
+     TÍTULO
+====================================================== -->
+
 <section class="hero" id="inicio">
-<small>SISTEMA DE OPINIONES TÉCNICAS DE CATEGORIZACIÓN</small>
-<h1>Estadística del Departamento de Desarrollo de Redes Integradas de Servicios de Salud</h1>
-<p>Consulta y seguimiento de opiniones técnicas de categorización.</p>
+
+  <div class="creador">
+    Creador: Ing. Lester Guillermo
+  </div>
+
+  <small>
+    SISTEMA DE OPINIONES TÉCNICAS DE CATEGORIZACIÓN
+  </small>
+
+  <h1>
+    Estadística del Departamento de Desarrollo de Redes Integradas de Servicios de Salud
+  </h1>
+
+  <p>
+    Consulta y seguimiento de opiniones técnicas de categorización.
+  </p>
+
 </section>
+
 
 <main>
 
+<!-- ======================================================
+     BASE DE DATOS + BUSCADOR
+====================================================== -->
+
 <div class="grid2">
-<section class="card">
-<h3>Base de datos oficial</h3>
-<p class="sub">Expedientes de Categorización</p>
-<button onclick="cargar()">Actualizar información</button>
-<div id="estado" class="status">Pendiente de conexión con Google Sheets.</div>
-</section>
 
 <section class="card">
-<h3>Buscar comunidad</h3>
-<p class="sub"><b>Busca únicamente en COMUNIDAD.</b> No busca proyecto, DMS, municipio ni DDRISS.</p>
-<div class="row">
-<input id="buscar" list="comunidades" placeholder="Ejemplo: CABAÑAS">
-<datalist id="comunidades"></datalist>
-<button onclick="buscarComunidad()">Buscar</button>
-</div>
+
+  <div class="db-info">
+
+    <div class="db-title">
+
+      <h3>Base de datos oficial</h3>
+
+      <p class="sub">
+        Expedientes de Categorización
+      </p>
+
+      <div id="ultimaActualizacion" class="actualizacion">
+        Consultando información...
+      </div>
+
+    </div>
+
+    <button onclick="cargar()">
+      Actualizar información
+    </button>
+
+  </div>
+
+  <div id="estado" class="status">
+    Conectando con Google Sheets...
+  </div>
+
 </section>
+
+
+<section class="card">
+
+  <h3>Buscar comunidad</h3>
+
+  <p class="sub">
+    <b>Busca únicamente en la columna COMUNIDAD.</b>
+    No busca proyecto, DMS, municipio ni DDRISS.
+  </p>
+
+  <div class="row">
+
+    <input
+      id="buscar"
+      list="comunidades"
+      placeholder="Ejemplo: CABAÑAS, JOYA NEGRA..."
+    >
+
+    <datalist id="comunidades"></datalist>
+
+    <button onclick="buscarComunidad()">
+      Buscar
+    </button>
+
+  </div>
+
+</section>
+
 </div>
 
-<section id="resultado" class="card"></section>
 
-<section class="card filtros" id="resumen">
+<!-- ======================================================
+     RESULTADO DE BÚSQUEDA
+====================================================== -->
+
+<section
+  id="resultado"
+  class="card">
+</section>
+
+
+<!-- ======================================================
+     FILTROS
+====================================================== -->
+
+<section
+  class="card filtros"
+  id="resumen">
+
 <h3>Filtros del tablero</h3>
-<p class="sub">Independientes del buscador superior.</p>
+
+<p class="sub">
+  Estos filtros son independientes del buscador superior.
+</p>
 
 <div class="filtergrid">
-<div><label>AÑO</label><select id="anio"></select></div>
-<div><label>DDRISS</label><select id="ddriss"></select></div>
-<div><label>MUNICIPIO</label><select id="municipio"></select></div>
-<div><label>DMS</label><select id="dms"></select></div>
-<div><label>OPINIÓN</label><select id="opinion"></select></div>
-<div><label>TIPO DE PROYECTO</label><select id="tipo"></select></div>
-<div><label>PROFESIONAL</label><select id="prof"></select></div>
-<div><label>FINANCIAMIENTO</label><select id="fuente"></select></div>
-<div><label>CATEGORÍA SOLICITADA</label><select id="categoria"></select></div>
-<div><label>DESDE</label><input type="date" id="desde"></div>
-<div><label>HASTA</label><input type="date" id="hasta"></div>
-<div><label>COMUNIDAD</label><input id="fcomunidad" placeholder="Comunidad"></div>
+
+<div>
+<label>AÑO</label>
+<select id="anio"></select>
 </div>
+
+<div>
+<label>DDRISS</label>
+<select id="ddriss"></select>
+</div>
+
+<div>
+<label>MUNICIPIO</label>
+<select id="municipio"></select>
+</div>
+
+<div>
+<label>DMS</label>
+<select id="dms"></select>
+</div>
+
+<div>
+<label>OPINIÓN TÉCNICA</label>
+<select id="opinion"></select>
+</div>
+
+<div>
+<label>TIPO DE PROYECTO</label>
+<select id="tipo"></select>
+</div>
+
+<div>
+<label>PROFESIONAL</label>
+<select id="prof"></select>
+</div>
+
+<div>
+<label>FUENTE DE FINANCIAMIENTO</label>
+<select id="fuente"></select>
+</div>
+
+<div>
+<label>CATEGORÍA SOLICITADA</label>
+<select id="categoria"></select>
+</div>
+
+<div>
+<label>DESDE</label>
+<input type="date" id="desde">
+</div>
+
+<div>
+<label>HASTA</label>
+<input type="date" id="hasta">
+</div>
+
+<div>
+<label>COMUNIDAD</label>
+<input
+  id="fcomunidad"
+  placeholder="Buscar comunidad">
+</div>
+
+</div>
+
 </section>
+
+
+<!-- ======================================================
+     INDICADORES
+====================================================== -->
 
 <section class="kpis">
-<div class="kpi"><small>EXPEDIENTES</small><b id="ktotal">0</b></div>
-<div class="kpi green"><small>FAVORABLES</small><b id="kfav">0</b></div>
-<div class="kpi red"><small>NO FAVORABLES</small><b id="knofav">0</b></div>
-<div class="kpi yellow"><small>PENDIENTES</small><b id="kpend">0</b></div>
-<div class="kpi"><small>POBLACIÓN</small><b id="kpob">0</b></div>
-<div class="kpi"><small>DEVUELTOS</small><b id="kdev">0</b></div>
-<div class="kpi"><small>CON SNIP</small><b id="ksnip">0</b></div>
+
+<div class="kpi">
+<small>EXPEDIENTES</small>
+<b id="ktotal">0</b>
+</div>
+
+<div class="kpi green">
+<small>FAVORABLES</small>
+<b id="kfav">0</b>
+</div>
+
+<div class="kpi red">
+<small>NO FAVORABLES</small>
+<b id="knofav">0</b>
+</div>
+
+<div class="kpi yellow">
+<small>PENDIENTES</small>
+<b id="kpend">0</b>
+</div>
+
+<div class="kpi">
+<small>POBLACIÓN</small>
+<b id="kpob">0</b>
+</div>
+
+<div class="kpi">
+<small>DEVUELTOS</small>
+<b id="kdev">0</b>
+</div>
+
+<div class="kpi">
+<small>CON SNIP</small>
+<b id="ksnip">0</b>
+</div>
+
 </section>
 
-<h2 id="estadistica">Estadística</h2>
+
+<!-- ======================================================
+     ESTADÍSTICA
+====================================================== -->
+
+<h2
+  id="estadistica"
+  class="section-title">
+  Estadística
+</h2>
+
 
 <div class="charts">
-<section class="card chart"><h3>Expedientes por DDRISS</h3><canvas id="cDDRISS"></canvas></section>
-<section class="card chart"><h3>Opinión técnica</h3><canvas id="cOpinion"></canvas></section>
+
+<section class="card chart">
+
+<h3>Expedientes por DDRISS</h3>
+
+<canvas id="cDDRISS"></canvas>
+
+</section>
+
+
+<section class="card chart">
+
+<h3>Opinión técnica</h3>
+
+<canvas id="cOpinion"></canvas>
+
+</section>
+
 </div>
+
 
 <div class="charts3">
-<section class="card chart"><h3>Tendencia mensual</h3><canvas id="cMes"></canvas></section>
-<section class="card chart"><h3>Tipo de proyecto</h3><canvas id="cTipo"></canvas></section>
-<section class="card chart"><h3>Fuente de financiamiento</h3><canvas id="cFuente"></canvas></section>
+
+<section class="card chart">
+
+<h3>Tendencia mensual</h3>
+
+<canvas id="cMes"></canvas>
+
+</section>
+
+
+<section class="card chart">
+
+<h3>Tipo de proyecto</h3>
+
+<canvas id="cTipo"></canvas>
+
+</section>
+
+
+<section class="card chart">
+
+<h3>Fuente de financiamiento</h3>
+
+<canvas id="cFuente"></canvas>
+
+</section>
+
 </div>
 
-<section id="expedientes" style="margin-top:25px">
-<h2>Información detallada</h2>
-<p class="sub">NO. y CÓDIGO se usan internamente pero no se muestran.</p>
-<div class="card"><div class="tablebox"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div></div>
+
+<!-- ======================================================
+     INFORMACIÓN CRUDA
+====================================================== -->
+
+<section
+  id="expedientes"
+  style="margin-top:30px">
+
+<h2>
+  Información detallada
+</h2>
+
+<p class="sub">
+  Visualización de la información registrada en la base oficial.
+  No se habilita descarga desde esta página.
+</p>
+
+<div class="card">
+
+<div class="tablebox">
+
+<table>
+
+<thead id="thead"></thead>
+
+<tbody id="tbody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
 </section>
 
 </main>
 
-<footer>Creador: Ing. Lester Guillermo</footer>
+
+<footer>
+Creador: Ing. Lester Guillermo
+</footer>
+
 
 <script>
 
-/* ==========================
-   CONEXIÓN
-========================== */
+/* =========================================================
+   CONEXIÓN OFICIAL CON GOOGLE APPS SCRIPT
+========================================================= */
 
-const API_URL="PEGA_AQUI_TU_URL_EXEC";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyEDpdPxQn8gY08P5jIlPCJ6YyyIVnQcNd9Rax6_59EY_Ic2e0M2ECP-eaAdv8ZRFDTmw/exec";
 
-/*
-A NO.
-B CODIGO
-C DDRISS
-D MUNICIPIO
-E DMS
-F COMUNIDAD
-G FECHA INGRESO
-H NOTA
-I FECHA EGRESO
-J OFICIO
-K TIPO
-L HABILITACION
-M CATEGORIZACION
-N PROYECTO
-O CAT ACTUAL
-P CAT SOLICITADA
-Q OPINION
-R PRELIMINAR/DEFINITIVO
-S DEVUELTO
-T FUENTE
-U POB DIRECTA
-V POB INDIRECTA
-W POB TOTAL
-X BRECHA
-Y COSTO OBRA
-Z COSTO TOTAL
-AA SNIP
-AB DIAS
-AC PROFESIONAL
-AD OBSERVACIONES
-*/
 
-const C={
-codigo:1,ddriss:2,municipio:3,dms:4,comunidad:5,
-ingreso:6,nota:7,egreso:8,oficio:9,tipo:10,
-habilitacion:11,categorizacion:12,proyecto:13,
-catActual:14,catSolicita:15,opinion:16,preliminar:17,
-devuelto:18,fuente:19,pobDirecta:20,pobIndirecta:21,
-pobTotal:22,brecha:23,costoObra:24,costoTotal:25,
-snip:26,dias:27,prof:28,observaciones:29
+/* =========================================================
+   ESTRUCTURA A - AD
+
+   A  NO.
+   B  CÓDIGO
+   C  DDRISS
+   D  MUNICIPIO
+   E  DMS
+   F  COMUNIDAD
+   G  FECHA INGRESO
+   H  NOTA DDRISS
+   I  FECHA EGRESO
+   J  OFICIO EGRESO
+   K  TIPO DE PROYECTO
+   L  HABILITACIÓN
+   M  CATEGORIZACIÓN / RECATEGORIZACIÓN
+   N  PROYECTO
+   O  CATEGORÍA ACTUAL
+   P  CATEGORÍA SOLICITADA
+   Q  OPINIÓN
+   R  PRELIMINAR / DEFINITIVO
+   S  DEVUELTO
+   T  FUENTE DE FINANCIAMIENTO
+   U  POBLACIÓN DIRECTA
+   V  POBLACIÓN INDIRECTA
+   W  POBLACIÓN TOTAL
+   X  BRECHA QQ
+   Y  COSTO OBRA QQ
+   Z  COSTO TOTAL QQ
+   AA SNIP
+   AB DÍAS HÁBILES
+   AC PROFESIONAL
+   AD OBSERVACIONES
+========================================================= */
+
+const C = {
+
+  no:0,
+  codigo:1,
+  ddriss:2,
+  municipio:3,
+  dms:4,
+  comunidad:5,
+  ingreso:6,
+  nota:7,
+  egreso:8,
+  oficio:9,
+  tipo:10,
+  habilitacion:11,
+  categorizacion:12,
+  proyecto:13,
+  catActual:14,
+  catSolicita:15,
+  opinion:16,
+  preliminar:17,
+  devuelto:18,
+  fuente:19,
+  pobDirecta:20,
+  pobIndirecta:21,
+  pobTotal:22,
+  brecha:23,
+  costoObra:24,
+  costoTotal:25,
+  snip:26,
+  dias:27,
+  prof:28,
+  observaciones:29
+
 };
 
-let DATA=[],FILTRADOS=[],CHARTS={};
 
-const t=v=>String(v??"").trim();
-const n=v=>t(v).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase();
-const num=v=>Number(t(v).replace(/[Q,$\s]/g,"").replace(/,/g,""))||0;
-const esc=v=>t(v).replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
+let DATA = [];
+let FILTRADOS = [];
+let CHARTS = {};
+
+
+/* =========================================================
+   UTILIDADES
+========================================================= */
+
+const t = v =>
+String(v ?? "").trim();
+
+
+const n = v =>
+t(v)
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.toUpperCase();
+
+
+const num = v => {
+
+  if(typeof v === "number"){
+    return v;
+  }
+
+  let s = t(v)
+    .replace(/Q/gi,"")
+    .replace(/\$/g,"")
+    .replace(/\s/g,"")
+    .replace(/,/g,"");
+
+  let x = Number(s);
+
+  return Number.isFinite(x) ? x : 0;
+};
+
+
+const esc = v =>
+t(v).replace(
+  /[&<>"']/g,
+  x => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[x])
+);
+
+
+/* =========================================================
+   AÑO
+========================================================= */
 
 function year(r){
- let m=t(r[C.codigo]).match(/20\d{2}/);
- if(m)return m[0];
- m=t(r[C.ingreso]).match(/20\d{2}/);
- return m?m[0]:"SIN AÑO";
+
+  let valores = [
+    r[C.codigo],
+    r[C.ingreso],
+    r[C.egreso]
+  ];
+
+  for(let valor of valores){
+
+    let m = t(valor).match(/20\d{2}/);
+
+    if(m){
+      return m[0];
+    }
+
+  }
+
+  let f = fecha(r[C.ingreso]);
+
+  if(f){
+    return String(f.getFullYear());
+  }
+
+  return "SIN AÑO";
 }
+
+
+/* =========================================================
+   FECHAS
+========================================================= */
 
 function fecha(v){
- let s=t(v),m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
- if(m)return new Date(+m[3],+m[2]-1,+m[1]);
- let d=new Date(s);
- return isNaN(d)?null:d;
+
+  if(v instanceof Date){
+    return v;
+  }
+
+  let s = t(v);
+
+  if(!s){
+    return null;
+  }
+
+  let m =
+  s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+
+  if(m){
+
+    return new Date(
+      Number(m[3]),
+      Number(m[2])-1,
+      Number(m[1])
+    );
+
+  }
+
+  let d = new Date(s);
+
+  return isNaN(d.getTime())
+    ? null
+    : d;
 }
 
-/* ==========================
+
+/* =========================================================
    CARGAR GOOGLE SHEETS
-========================== */
+========================================================= */
 
 async function cargar(){
 
- const estado=document.getElementById("estado");
+  const estado =
+  document.getElementById("estado");
 
- if(!API_URL.startsWith("http")){
-   estado.textContent="Falta colocar la URL /exec de Google Apps Script.";
-   return;
- }
+  estado.className = "status";
 
- estado.textContent="Actualizando información...";
+  estado.textContent =
+  "Actualizando información desde Google Sheets...";
 
- try{
-   const r=await fetch(API_URL+"?t="+Date.now(),{cache:"no-store"});
-   if(!r.ok)throw new Error("HTTP "+r.status);
 
-   const j=await r.json();
+  try{
 
-   /* Acepta:
-      [ [...], [...] ]
-      {data:[...]}
-      {values:[...]}
-   */
-   let rows=Array.isArray(j)?j:(j.data||j.values||[]);
+    const separador =
+    API_URL.includes("?") ? "&" : "?";
 
-   if(!Array.isArray(rows))throw new Error("Formato no válido");
+    const respuesta =
+    await fetch(
+      API_URL +
+      separador +
+      "t=" +
+      Date.now(),
+      {
+        method:"GET",
+        cache:"no-store",
+        redirect:"follow"
+      }
+    );
 
-   /* quitar encabezado si viene incluido */
-   if(rows.length && n(rows[0][2]).includes("DDRISS"))rows.shift();
 
-   DATA=rows.filter(r=>Array.isArray(r)&&r.some(x=>t(x)!==""));
+    if(!respuesta.ok){
 
-   estado.textContent=`Actualizado: ${DATA.length.toLocaleString("es-GT")} expedientes`;
-   estado.style.background="#e3f5eb";
-   estado.style.color="#087342";
+      throw new Error(
+        "Respuesta HTTP " +
+        respuesta.status
+      );
 
-   filtros();
-   aplicar();
+    }
 
- }catch(e){
-   estado.textContent="Error al consultar Google Sheets: "+e.message;
- }
+
+    const texto =
+    await respuesta.text();
+
+
+    let json;
+
+    try{
+
+      json = JSON.parse(texto);
+
+    }catch(error){
+
+      console.error(
+        "Respuesta recibida:",
+        texto
+      );
+
+      throw new Error(
+        "Apps Script no devolvió JSON válido."
+      );
+
+    }
+
+
+    let rows = [];
+
+
+    if(Array.isArray(json)){
+
+      rows = json;
+
+    }else if(
+      json &&
+      Array.isArray(json.data)
+    ){
+
+      rows = json.data;
+
+    }else if(
+      json &&
+      Array.isArray(json.values)
+    ){
+
+      rows = json.values;
+
+    }else if(
+      json &&
+      Array.isArray(json.rows)
+    ){
+
+      rows = json.rows;
+
+    }else{
+
+      console.error(
+        "JSON recibido:",
+        json
+      );
+
+      throw new Error(
+        "El formato recibido desde Apps Script no contiene filas."
+      );
+
+    }
+
+
+    /*
+       Quitamos encabezado únicamente
+       cuando realmente parece encabezado.
+    */
+
+    if(rows.length){
+
+      const primera = rows[0];
+
+      if(
+        Array.isArray(primera) &&
+        (
+          n(primera[2]) === "DDRISS" ||
+          n(primera[5]) === "COMUNIDAD" ||
+          n(primera[13]) === "PROYECTO"
+        )
+      ){
+
+        rows = rows.slice(1);
+
+      }
+
+    }
+
+
+    DATA =
+    rows.filter(
+      fila =>
+      Array.isArray(fila) &&
+      fila.some(
+        celda => t(celda) !== ""
+      )
+    );
+
+
+    if(DATA.length === 0){
+
+      throw new Error(
+        "La conexión respondió, pero no se recibieron registros."
+      );
+
+    }
+
+
+    FILTRADOS = [...DATA];
+
+
+    estado.textContent =
+    "Base actualizada correctamente. " +
+    DATA.length.toLocaleString("es-GT") +
+    " expedientes cargados.";
+
+
+    estado.className =
+    "status ok";
+
+
+    const ahora =
+    new Date();
+
+
+    document.getElementById(
+      "ultimaActualizacion"
+    ).textContent =
+    "Última actualización: " +
+    ahora.toLocaleString(
+      "es-GT"
+    );
+
+
+    construirFiltros();
+
+    aplicar();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    estado.className =
+    "status error";
+
+    estado.textContent =
+    "No fue posible cargar la base: " +
+    error.message;
+
+  }
+
 }
 
-/* ==========================
-   FILTROS
-========================== */
 
-function unicos(i){
- return [...new Set(DATA.map(r=>t(r[i])).filter(Boolean))]
- .sort((a,b)=>a.localeCompare(b,"es"));
+/* =========================================================
+   VALORES ÚNICOS
+========================================================= */
+
+function unicos(indice){
+
+  return [
+    ...new Set(
+      DATA
+      .map(r => t(r[indice]))
+      .filter(Boolean)
+    )
+  ]
+  .sort(
+    (a,b) =>
+    a.localeCompare(
+      b,
+      "es",
+      {numeric:true}
+    )
+  );
+
 }
 
-function select(id,valores,todos){
- document.getElementById(id).innerHTML=
- `<option value="">${todos}</option>`+
- valores.map(v=>`<option>${esc(v)}</option>`).join("");
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function llenarSelect(
+  id,
+  valores,
+  textoTodos
+){
+
+  const elemento =
+  document.getElementById(id);
+
+
+  elemento.innerHTML =
+  `<option value="">${textoTodos}</option>` +
+  valores
+  .map(
+    valor =>
+    `<option value="${esc(valor)}">${esc(valor)}</option>`
+  )
+  .join("");
+
 }
 
-function filtros(){
 
- select("anio",[...new Set(DATA.map(year))].sort(),"Todos");
- select("ddriss",unicos(C.ddriss),"Todas");
- select("municipio",unicos(C.municipio),"Todos");
- select("dms",unicos(C.dms),"Todos");
- select("opinion",unicos(C.opinion),"Todas");
- select("tipo",unicos(C.tipo),"Todos");
- select("prof",unicos(C.prof),"Todos");
- select("fuente",unicos(C.fuente),"Todas");
- select("categoria",unicos(C.catSolicita),"Todas");
+/* =========================================================
+   CONSTRUIR FILTROS
+========================================================= */
 
- document.getElementById("comunidades").innerHTML=
- unicos(C.comunidad).map(x=>`<option value="${esc(x)}">`).join("");
+function construirFiltros(){
 
- document.querySelectorAll(".filtros select,.filtros input")
- .forEach(x=>{
-   x.onchange=aplicar;
-   if(x.tagName==="INPUT")x.oninput=aplicar;
- });
+  const anios =
+  [
+    ...new Set(
+      DATA
+      .map(year)
+      .filter(
+        x => x !== "SIN AÑO"
+      )
+    )
+  ]
+  .sort(
+    (a,b) => b-a
+  );
+
+
+  llenarSelect(
+    "anio",
+    anios,
+    "Todos"
+  );
+
+
+  llenarSelect(
+    "ddriss",
+    unicos(C.ddriss),
+    "Todas"
+  );
+
+
+  llenarSelect(
+    "municipio",
+    unicos(C.municipio),
+    "Todos"
+  );
+
+
+  llenarSelect(
+    "dms",
+    unicos(C.dms),
+    "Todos"
+  );
+
+
+  llenarSelect(
+    "opinion",
+    unicos(C.opinion),
+    "Todas"
+  );
+
+
+  llenarSelect(
+    "tipo",
+    unicos(C.tipo),
+    "Todos"
+  );
+
+
+  llenarSelect(
+    "prof",
+    unicos(C.prof),
+    "Todos"
+  );
+
+
+  llenarSelect(
+    "fuente",
+    unicos(C.fuente),
+    "Todas"
+  );
+
+
+  llenarSelect(
+    "categoria",
+    unicos(C.catSolicita),
+    "Todas"
+  );
+
+
+  document.getElementById(
+    "comunidades"
+  ).innerHTML =
+  unicos(C.comunidad)
+  .map(
+    comunidad =>
+    `<option value="${esc(comunidad)}"></option>`
+  )
+  .join("");
+
+
+  document
+  .querySelectorAll(
+    ".filtros select"
+  )
+  .forEach(
+    elemento => {
+
+      elemento.onchange =
+      aplicar;
+
+    }
+  );
+
+
+  document
+  .querySelectorAll(
+    ".filtros input"
+  )
+  .forEach(
+    elemento => {
+
+      elemento.oninput =
+      aplicar;
+
+      elemento.onchange =
+      aplicar;
+
+    }
+  );
+
 }
 
-function v(id){return document.getElementById(id).value}
+
+/* =========================================================
+   OBTENER VALOR
+========================================================= */
+
+function v(id){
+
+  return document
+  .getElementById(id)
+  .value;
+
+}
+
+
+/* =========================================================
+   APLICAR FILTROS
+========================================================= */
 
 function aplicar(){
 
- let desde=v("desde")?new Date(v("desde")+"T00:00:00"):null;
- let hasta=v("hasta")?new Date(v("hasta")+"T23:59:59"):null;
+  if(!DATA.length){
 
- FILTRADOS=DATA.filter(r=>{
+    FILTRADOS = [];
 
-   let f=fecha(r[C.ingreso]);
+    kpis();
+    tabla();
 
-   return
-   (!v("anio")||year(r)===v("anio")) &&
-   (!v("ddriss")||n(r[C.ddriss])===n(v("ddriss"))) &&
-   (!v("municipio")||n(r[C.municipio])===n(v("municipio"))) &&
-   (!v("dms")||n(r[C.dms])===n(v("dms"))) &&
-   (!v("opinion")||n(r[C.opinion])===n(v("opinion"))) &&
-   (!v("tipo")||n(r[C.tipo])===n(v("tipo"))) &&
-   (!v("prof")||n(r[C.prof])===n(v("prof"))) &&
-   (!v("fuente")||n(r[C.fuente])===n(v("fuente"))) &&
-   (!v("categoria")||n(r[C.catSolicita])===n(v("categoria"))) &&
-   (!v("fcomunidad")||n(r[C.comunidad]).includes(n(v("fcomunidad")))) &&
-   (!desde||(f&&f>=desde)) &&
-   (!hasta||(f&&f<=hasta));
+    return;
+  }
 
- });
 
- kpis();
- graficas();
- tabla();
+  const desde =
+  v("desde")
+  ? new Date(
+      v("desde") +
+      "T00:00:00"
+    )
+  : null;
+
+
+  const hasta =
+  v("hasta")
+  ? new Date(
+      v("hasta") +
+      "T23:59:59"
+    )
+  : null;
+
+
+  FILTRADOS =
+  DATA.filter(
+    r => {
+
+      const f =
+      fecha(
+        r[C.ingreso]
+      );
+
+
+      return (
+
+        (
+          !v("anio") ||
+          year(r) === v("anio")
+        )
+
+        &&
+
+        (
+          !v("ddriss") ||
+          n(r[C.ddriss]) ===
+          n(v("ddriss"))
+        )
+
+        &&
+
+        (
+          !v("municipio") ||
+          n(r[C.municipio]) ===
+          n(v("municipio"))
+        )
+
+        &&
+
+        (
+          !v("dms") ||
+          n(r[C.dms]) ===
+          n(v("dms"))
+        )
+
+        &&
+
+        (
+          !v("opinion") ||
+          n(r[C.opinion]) ===
+          n(v("opinion"))
+        )
+
+        &&
+
+        (
+          !v("tipo") ||
+          n(r[C.tipo]) ===
+          n(v("tipo"))
+        )
+
+        &&
+
+        (
+          !v("prof") ||
+          n(r[C.prof]) ===
+          n(v("prof"))
+        )
+
+        &&
+
+        (
+          !v("fuente") ||
+          n(r[C.fuente]) ===
+          n(v("fuente"))
+        )
+
+        &&
+
+        (
+          !v("categoria") ||
+          n(r[C.catSolicita]) ===
+          n(v("categoria"))
+        )
+
+        &&
+
+        (
+          !v("fcomunidad") ||
+          n(r[C.comunidad])
+          .includes(
+            n(v("fcomunidad"))
+          )
+        )
+
+        &&
+
+        (
+          !desde ||
+          (
+            f &&
+            f >= desde
+          )
+        )
+
+        &&
+
+        (
+          !hasta ||
+          (
+            f &&
+            f <= hasta
+          )
+        )
+
+      );
+
+    }
+  );
+
+
+  kpis();
+  graficas();
+  tabla();
+
 }
 
-/* ==========================
-   KPIs
-========================== */
+
+/* =========================================================
+   KPI
+========================================================= */
 
 function kpis(){
 
- let fav=0,nofav=0,pob=0,dev=0,snip=0;
+  let fav = 0;
+  let nofav = 0;
+  let pob = 0;
+  let dev = 0;
+  let snip = 0;
 
- FILTRADOS.forEach(r=>{
 
-   let o=n(r[C.opinion]);
+  FILTRADOS.forEach(
+    r => {
 
-   if(o==="FAVORABLE")fav++;
-   else if(o.includes("NO FAVORABLE"))nofav++;
+      const opinion =
+      n(
+        r[C.opinion]
+      );
 
-   pob+=num(r[C.pobTotal]);
 
-   if(t(r[C.devuelto]))dev++;
+      if(
+        opinion === "FAVORABLE"
+      ){
 
-   let s=n(r[C.snip]);
+        fav++;
 
-   if(s&&!["0","NO","NA","N/A"].includes(s))snip++;
- });
+      }else if(
+        opinion.includes(
+          "NO FAVORABLE"
+        )
+      ){
 
- let pend=FILTRADOS.length-fav-nofav;
+        nofav++;
 
- document.getElementById("ktotal").textContent=FILTRADOS.length.toLocaleString("es-GT");
- document.getElementById("kfav").textContent=fav.toLocaleString("es-GT");
- document.getElementById("knofav").textContent=nofav.toLocaleString("es-GT");
- document.getElementById("kpend").textContent=pend.toLocaleString("es-GT");
- document.getElementById("kpob").textContent=Math.round(pob).toLocaleString("es-GT");
- document.getElementById("kdev").textContent=dev.toLocaleString("es-GT");
- document.getElementById("ksnip").textContent=snip.toLocaleString("es-GT");
+      }
+
+
+      pob +=
+      num(
+        r[C.pobTotal]
+      );
+
+
+      const devuelto =
+      n(
+        r[C.devuelto]
+      );
+
+
+      if(
+        devuelto &&
+        ![
+          "NO",
+          "0",
+          "N/A",
+          "NA"
+        ].includes(
+          devuelto
+        )
+      ){
+
+        dev++;
+
+      }
+
+
+      const snipValor =
+      n(
+        r[C.snip]
+      );
+
+
+      if(
+        snipValor &&
+        ![
+          "0",
+          "NO",
+          "NA",
+          "N/A"
+        ].includes(
+          snipValor
+        )
+      ){
+
+        snip++;
+
+      }
+
+    }
+  );
+
+
+  const pendientes =
+  FILTRADOS.length -
+  fav -
+  nofav;
+
+
+  document.getElementById(
+    "ktotal"
+  ).textContent =
+  FILTRADOS.length
+  .toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "kfav"
+  ).textContent =
+  fav.toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "knofav"
+  ).textContent =
+  nofav.toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "kpend"
+  ).textContent =
+  pendientes.toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "kpob"
+  ).textContent =
+  Math.round(pob)
+  .toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "kdev"
+  ).textContent =
+  dev.toLocaleString(
+    "es-GT"
+  );
+
+
+  document.getElementById(
+    "ksnip"
+  ).textContent =
+  snip.toLocaleString(
+    "es-GT"
+  );
+
 }
 
-/* ==========================
-   GRÁFICAS
-========================== */
+
+/* =========================================================
+   CONTEO PARA GRÁFICAS
+========================================================= */
 
 function conteo(indice){
 
- let x={};
+  const resultado = {};
 
- FILTRADOS.forEach(r=>{
-   let k=t(r[indice])||"SIN DATO";
-   x[k]=(x[k]||0)+1;
- });
 
- return Object.entries(x).sort((a,b)=>b[1]-a[1]);
+  FILTRADOS.forEach(
+    r => {
+
+      const clave =
+      t(r[indice]) ||
+      "SIN DATO";
+
+
+      resultado[clave] =
+      (
+        resultado[clave] ||
+        0
+      ) + 1;
+
+    }
+  );
+
+
+  return Object
+  .entries(resultado)
+  .sort(
+    (a,b) =>
+    b[1] - a[1]
+  );
+
 }
 
-function chart(id,type,labels,data){
 
- if(CHARTS[id])CHARTS[id].destroy();
+/* =========================================================
+   CREAR GRÁFICA
+========================================================= */
 
- CHARTS[id]=new Chart(document.getElementById(id),{
-   type,
-   data:{
-     labels,
-     datasets:[{data,label:"Expedientes",borderWidth:2}]
-   },
-   options:{
-     responsive:true,
-     maintainAspectRatio:false,
-     plugins:{legend:{display:type==="doughnut"}},
-     scales:type==="doughnut"?{}:{y:{beginAtZero:true}}
-   }
- });
+function crearChart(
+  id,
+  tipo,
+  labels,
+  datos
+){
+
+  if(
+    typeof Chart ===
+    "undefined"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    CHARTS[id]
+  ){
+
+    CHARTS[id]
+    .destroy();
+
+  }
+
+
+  const canvas =
+  document.getElementById(id);
+
+
+  CHARTS[id] =
+  new Chart(
+    canvas,
+    {
+
+      type:tipo,
+
+      data:{
+
+        labels:labels,
+
+        datasets:[
+          {
+
+            data:datos,
+
+            label:"Expedientes",
+
+            borderWidth:2
+
+          }
+        ]
+
+      },
+
+      options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+
+          legend:{
+
+            display:
+            tipo ===
+            "doughnut"
+
+          }
+
+        },
+
+        scales:
+        tipo ===
+        "doughnut"
+        ? {}
+        : {
+
+            y:{
+              beginAtZero:true,
+              ticks:{
+                precision:0
+              }
+            }
+
+          }
+
+      }
+
+    }
+  );
+
 }
+
+
+/* =========================================================
+   GRÁFICAS
+========================================================= */
 
 function graficas(){
 
- let d=conteo(C.ddriss);
- chart("cDDRISS","bar",d.map(x=>x[0]),d.map(x=>x[1]));
+  const porDDRISS =
+  conteo(
+    C.ddriss
+  );
 
- let fav=0,nofav=0,pend=0;
 
- FILTRADOS.forEach(r=>{
-   let o=n(r[C.opinion]);
-   if(o==="FAVORABLE")fav++;
-   else if(o.includes("NO FAVORABLE"))nofav++;
-   else pend++;
- });
+  crearChart(
+    "cDDRISS",
+    "bar",
+    porDDRISS.map(
+      x => x[0]
+    ),
+    porDDRISS.map(
+      x => x[1]
+    )
+  );
 
- chart("cOpinion","doughnut",
- ["Favorable","No favorable","Pendiente / sin dato"],
- [fav,nofav,pend]);
 
- let meses=Array(12).fill(0);
+  let fav = 0;
+  let nofav = 0;
+  let pendiente = 0;
 
- FILTRADOS.forEach(r=>{
-   let f=fecha(r[C.ingreso]);
-   if(f)meses[f.getMonth()]++;
- });
 
- chart("cMes","line",
- ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],
- meses);
+  FILTRADOS.forEach(
+    r => {
 
- let tp=conteo(C.tipo);
- chart("cTipo","bar",tp.map(x=>x[0]),tp.map(x=>x[1]));
+      const o =
+      n(
+        r[C.opinion]
+      );
 
- let fu=conteo(C.fuente);
- chart("cFuente","bar",fu.map(x=>x[0]),fu.map(x=>x[1]));
+
+      if(
+        o ===
+        "FAVORABLE"
+      ){
+
+        fav++;
+
+      }else if(
+        o.includes(
+          "NO FAVORABLE"
+        )
+      ){
+
+        nofav++;
+
+      }else{
+
+        pendiente++;
+
+      }
+
+    }
+  );
+
+
+  crearChart(
+    "cOpinion",
+    "doughnut",
+    [
+      "Favorable",
+      "No favorable",
+      "Pendiente / sin dato"
+    ],
+    [
+      fav,
+      nofav,
+      pendiente
+    ]
+  );
+
+
+  const meses =
+  Array(12).fill(0);
+
+
+  FILTRADOS.forEach(
+    r => {
+
+      const f =
+      fecha(
+        r[C.ingreso]
+      );
+
+
+      if(f){
+
+        meses[
+          f.getMonth()
+        ]++;
+
+      }
+
+    }
+  );
+
+
+  crearChart(
+    "cMes",
+    "line",
+    [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic"
+    ],
+    meses
+  );
+
+
+  const porTipo =
+  conteo(
+    C.tipo
+  );
+
+
+  crearChart(
+    "cTipo",
+    "bar",
+    porTipo.map(
+      x => x[0]
+    ),
+    porTipo.map(
+      x => x[1]
+    )
+  );
+
+
+  const porFuente =
+  conteo(
+    C.fuente
+  );
+
+
+  crearChart(
+    "cFuente",
+    "bar",
+    porFuente.map(
+      x => x[0]
+    ),
+    porFuente.map(
+      x => x[1]
+    )
+  );
+
 }
 
-/* ==========================
-   BUSCADOR EXCLUSIVO
-   COMUNIDAD = COLUMNA F
-========================== */
+
+/* =========================================================
+   BUSCADOR
+   EXCLUSIVAMENTE COLUMNA F = COMUNIDAD
+========================================================= */
 
 function buscarComunidad(){
 
- let q=n(v("buscar"));
+  const textoBusqueda =
+  v("buscar");
 
- if(!q)return;
 
- /* SOLO ESTA COLUMNA */
- let r=DATA.filter(x=>n(x[C.comunidad]).includes(q));
+  const q =
+  n(
+    textoBusqueda
+  );
 
- let box=document.getElementById("resultado");
- box.style.display="block";
 
- box.innerHTML=`
- <div style="display:flex;justify-content:space-between">
-   <div>
-     <h3>Historial: ${esc(v("buscar"))}</h3>
-     <p class="sub">
-       ${r.length} registros encontrados exclusivamente en COMUNIDAD.
-       Esta búsqueda no modifica el tablero.
-     </p>
-   </div>
-   <b style="font-size:34px">${r.length}</b>
- </div>
+  if(!q){
 
- <div class="tablebox">
- <table>
- <thead>
- <tr>
- <th>Año</th>
- <th>DDRISS</th>
- <th>Municipio</th>
- <th>DMS</th>
- <th>Comunidad</th>
- <th>Proyecto</th>
- <th>Opinión</th>
- <th>Profesional</th>
- <th>Ingreso</th>
- <th>Oficio</th>
- </tr>
- </thead>
- <tbody>
- ${r.map(x=>`
- <tr>
- <td>${year(x)}</td>
- <td>${esc(x[C.ddriss])}</td>
- <td>${esc(x[C.municipio])}</td>
- <td>${esc(x[C.dms])}</td>
- <td><b>${esc(x[C.comunidad])}</b></td>
- <td>${esc(x[C.proyecto])}</td>
- <td>${badge(x[C.opinion])}</td>
- <td>${esc(x[C.prof])}</td>
- <td>${esc(x[C.ingreso])}</td>
- <td>${esc(x[C.oficio])}</td>
- </tr>`).join("")}
- </tbody>
- </table>
- </div>`;
+    alert(
+      "Escriba el nombre de una comunidad."
+    );
+
+    return;
+
+  }
+
+
+  /*
+     IMPORTANTE:
+     SOLO BUSCA EN C.comunidad
+     C.comunidad = índice 5 = columna F
+  */
+
+  const resultados =
+  DATA.filter(
+    fila =>
+    n(
+      fila[C.comunidad]
+    ).includes(q)
+  );
+
+
+  const box =
+  document.getElementById(
+    "resultado"
+  );
+
+
+  box.style.display =
+  "block";
+
+
+  box.innerHTML = `
+
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-start;
+    "
+  >
+
+    <div>
+
+      <h3>
+        Historial:
+        ${esc(textoBusqueda)}
+      </h3>
+
+      <p class="sub">
+
+        ${resultados.length.toLocaleString("es-GT")}
+        registros encontrados exclusivamente
+        en la columna COMUNIDAD.
+
+        Esta búsqueda no modifica
+        las gráficas ni los filtros
+        del tablero.
+
+      </p>
+
+    </div>
+
+    <b
+      style="
+        font-size:34px;
+        color:#17364c;
+      "
+    >
+
+      ${resultados.length.toLocaleString("es-GT")}
+
+    </b>
+
+  </div>
+
+
+  <div class="tablebox">
+
+  <table>
+
+  <thead>
+
+  <tr>
+
+  <th>Año</th>
+  <th>DDRISS</th>
+  <th>Municipio</th>
+  <th>DMS</th>
+  <th>Comunidad</th>
+  <th>Proyecto</th>
+  <th>Opinión</th>
+  <th>Profesional</th>
+  <th>Fecha ingreso</th>
+  <th>Oficio</th>
+
+  </tr>
+
+  </thead>
+
+  <tbody>
+
+  ${
+    resultados.length
+
+    ?
+
+    resultados
+    .map(
+      x => `
+
+      <tr>
+
+      <td>
+      ${esc(year(x))}
+      </td>
+
+      <td>
+      ${esc(x[C.ddriss])}
+      </td>
+
+      <td>
+      ${esc(x[C.municipio])}
+      </td>
+
+      <td>
+      ${esc(x[C.dms])}
+      </td>
+
+      <td>
+      <b>
+      ${esc(x[C.comunidad])}
+      </b>
+      </td>
+
+      <td>
+      ${esc(x[C.proyecto])}
+      </td>
+
+      <td>
+      ${badge(x[C.opinion])}
+      </td>
+
+      <td>
+      ${esc(x[C.prof])}
+      </td>
+
+      <td>
+      ${esc(x[C.ingreso])}
+      </td>
+
+      <td>
+      ${esc(x[C.oficio])}
+      </td>
+
+      </tr>
+
+      `
+    )
+    .join("")
+
+    :
+
+    `
+
+    <tr>
+
+    <td
+      colspan="10"
+      style="
+        text-align:center;
+        padding:30px;
+      "
+    >
+
+    No se encontraron registros
+    para esa comunidad.
+
+    </td>
+
+    </tr>
+
+    `
+
+  }
+
+  </tbody>
+
+  </table>
+
+  </div>
+
+  `;
+
+
+  box.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
 }
 
-/* ==========================
-   TABLA A-AD
-   OCULTAMOS A Y B
-========================== */
 
-const COLS=[
-["DDRISS",2],["MUNICIPIO",3],["DMS",4],["COMUNIDAD",5],
-["FECHA INGRESO",6],["NOTA DDRISS",7],["FECHA EGRESO",8],
-["OFICIO EGRESO",9],["TIPO DE PROYECTO",10],["HABILITACIÓN",11],
-["CATEGORIZACIÓN / RECATEGORIZACIÓN",12],["PROYECTO",13],
-["CATEGORÍA ACTUAL",14],["CATEGORÍA SOLICITADA",15],
-["OPINIÓN",16],["PRELIMINAR / DEFINITIVO",17],["DEVUELTO",18],
-["FINANCIAMIENTO",19],["POBLACIÓN DIRECTA",20],
-["POBLACIÓN INDIRECTA",21],["POBLACIÓN TOTAL",22],
-["BRECHA QQ",23],["COSTO OBRA QQ",24],["COSTO TOTAL QQ",25],
-["SNIP",26],["DÍAS HÁBILES",27],["PROFESIONAL",28],["OBSERVACIONES",29]
+/* =========================================================
+   COLUMNAS DE INFORMACIÓN DETALLADA
+   A Y B NO SE MUESTRAN
+========================================================= */
+
+const COLS = [
+
+["DDRISS",2],
+
+["MUNICIPIO",3],
+
+["DMS",4],
+
+["COMUNIDAD",5],
+
+["FECHA INGRESO",6],
+
+["NOTA DDRISS",7],
+
+["FECHA EGRESO",8],
+
+["OFICIO EGRESO",9],
+
+["TIPO DE PROYECTO",10],
+
+["HABILITACIÓN",11],
+
+["CATEGORIZACIÓN / RECATEGORIZACIÓN",12],
+
+["PROYECTO",13],
+
+["CATEGORÍA ACTUAL",14],
+
+["CATEGORÍA SOLICITADA",15],
+
+["OPINIÓN",16],
+
+["PRELIMINAR / DEFINITIVO",17],
+
+["DEVUELTO",18],
+
+["FUENTE DE FINANCIAMIENTO",19],
+
+["POBLACIÓN DIRECTA",20],
+
+["POBLACIÓN INDIRECTA",21],
+
+["POBLACIÓN TOTAL",22],
+
+["BRECHA QQ",23],
+
+["COSTO OBRA QQ",24],
+
+["COSTO TOTAL QQ",25],
+
+["SNIP",26],
+
+["DÍAS HÁBILES",27],
+
+["PROFESIONAL",28],
+
+["OBSERVACIONES",29]
+
 ];
 
-function badge(o){
 
- let x=n(o);
+/* =========================================================
+   BADGE OPINIÓN
+========================================================= */
 
- let clase=x==="FAVORABLE"?"fav":
- x.includes("NO FAVORABLE")?"nofav":"pend";
+function badge(opinion){
 
- return `<span class="badge ${clase}">${esc(o)||"SIN DATO"}</span>`;
+  const texto =
+  n(opinion);
+
+
+  let clase =
+  "pend";
+
+
+  if(
+    texto ===
+    "FAVORABLE"
+  ){
+
+    clase =
+    "fav";
+
+  }else if(
+    texto.includes(
+      "NO FAVORABLE"
+    )
+  ){
+
+    clase =
+    "nofav";
+
+  }
+
+
+  return `
+
+  <span
+    class="badge ${clase}"
+  >
+
+  ${
+    esc(opinion) ||
+    "SIN DATO"
+  }
+
+  </span>
+
+  `;
+
 }
+
+
+/* =========================================================
+   TABLA INFORMACIÓN CRUDA
+========================================================= */
 
 function tabla(){
 
- document.getElementById("thead").innerHTML=
- "<tr>"+COLS.map(c=>`<th>${c[0]}</th>`).join("")+"</tr>";
+  const thead =
+  document.getElementById(
+    "thead"
+  );
 
- document.getElementById("tbody").innerHTML=
- FILTRADOS.map(r=>
- "<tr>"+
- COLS.map(c=>
- c[1]===C.opinion
- ?`<td>${badge(r[c[1]])}</td>`
- :`<td>${esc(r[c[1]])}</td>`
- ).join("")+
- "</tr>"
- ).join("");
+
+  const tbody =
+  document.getElementById(
+    "tbody"
+  );
+
+
+  thead.innerHTML =
+
+  "<tr>" +
+
+  COLS
+  .map(
+    columna =>
+    `<th>${columna[0]}</th>`
+  )
+  .join("")
+
+  +
+
+  "</tr>";
+
+
+  if(
+    !FILTRADOS.length
+  ){
+
+    tbody.innerHTML = `
+
+    <tr>
+
+      <td
+        colspan="${COLS.length}"
+        style="
+          text-align:center;
+          padding:30px;
+        "
+      >
+
+      No hay registros para mostrar.
+
+      </td>
+
+    </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+
+  FILTRADOS
+
+  .map(
+    fila => {
+
+      return (
+
+        "<tr>" +
+
+        COLS
+
+        .map(
+          columna => {
+
+            const indice =
+            columna[1];
+
+
+            if(
+              indice ===
+              C.opinion
+            ){
+
+              return (
+                "<td>" +
+                badge(
+                  fila[indice]
+                ) +
+                "</td>"
+              );
+
+            }
+
+
+            return (
+              "<td>" +
+              esc(
+                fila[indice]
+              ) +
+              "</td>"
+            );
+
+          }
+        )
+
+        .join("")
+
+        +
+
+        "</tr>"
+
+      );
+
+    }
+  )
+
+  .join("");
+
 }
 
+
+/* =========================================================
+   ENTER EN BUSCADOR
+========================================================= */
+
+document
+.getElementById("buscar")
+.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      buscarComunidad();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   CARGA AUTOMÁTICA
+
+   Cada vez que alguien abre o recarga la página,
+   vuelve a consultar Apps Script.
+   Por lo tanto, los cambios realizados en Google Sheets
+   se reflejan sin tener que modificar GitHub.
+========================================================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    cargar();
+
+  }
+);
+
 </script>
+
 </body>
 </html>
