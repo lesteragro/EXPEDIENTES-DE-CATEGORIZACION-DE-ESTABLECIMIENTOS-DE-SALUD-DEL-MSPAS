@@ -645,42 +645,8 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbyEDpdPxQn8gY08P5jIlPCJ6YyyIVnQcNd9Rax6_59EY_Ic2e0M2ECP-eaAdv8ZRFDTmw/exec";
 
 
-/*
-COLUMNAS A-AD
-
-A  0  NO.
-B  1  CODIGO
-C  2  DDRISS
-D  3  MUNICIPIO
-E  4  DMS
-F  5  COMUNIDAD
-G  6  FECHA INGRESO
-H  7  NOTA DDRISS
-I  8  FECHA EGRESO
-J  9  OFICIO
-K 10  CONSTRUCCION/AMPLIACION/REMOZAMIENTO/MEJORAMIENTO
-L 11  HABILITACION
-M 12  CATEGORIZACION/RECATEGORIZACION
-N 13  NOMBRE PROYECTO
-O 14  CATEGORIA ACTUAL
-P 15  CATEGORIA SOLICITADA
-Q 16  OPINION
-R 17  PRELIMINAR/DEFINITIVO
-S 18  DEVOLVER
-T 19  FUENTE
-U 20  POB DIRECTA
-V 21  POB INDIRECTA
-W 22  POB TOTAL
-X 23  BRECHA
-Y 24  COSTO OBRA
-Z 25  COSTO TOTAL
-AA 26 SNIP
-AB 27 DIAS
-AC 28 PROFESIONAL
-AD 29 OBSERVACIONES
-*/
-
-const C={
+// Índices actualizados y validados con los encabezados de la fuente.
+let C={
   no:0,
   codigo:1,
   ddriss:2,
@@ -712,6 +678,41 @@ const C={
   prof:28,
   observaciones:29
 };
+
+const CAMPOS = Object.keys(C);
+const ENCABEZADOS = ["NO.", "AÑO", "DDRISS", "MUNICIPIO", "DMS", "COMUNIDAD", "FECHA DE  INGRESO DEL EXPEDIENTE A  CATEGORIZACIÓN", "No. NOTA DE TRABAJO DRISS", "FECHA DE EGRESO DEL EXPEDIENTE DE CATEGORIZACIÓN ", "No. DE OFICIO DE EGRESO DE CATEGORIZACIÓN", "Construcción Ampliación  Remozamiento Mejoramiento", "Habilitación", "Categorización Recategorización ", "NOMBRE COMPLETO DEL PROYECTO SOLICITADO", "CATEGORIA DEL ESTABLECIMIENTO QUE FUNCIONA ACTUALMENTE ", "CATEGORIA QUE SOLICITA", "FAVORABLE  NO FAVORABLE  PENDIENTE  ", "PRELIMINAR/DEFINITIVO ", "DEVOLVER A DDRISS PARA CORRECCONES", "FUENTE DE FINANCIAMIENTO", "POBLACIÓN A BENEFICIARSE DIRECTA", "POBLACIÓN A BENEFICIARSE INDIRECTA", "POBLACIÓN A BENEFICIARSE TOTAL", "BRECHA IDENTIFICADA QQ.", "COSTO DE LA OBRA QQ.  ", "COSTO TOTAL QQ (sumatoria de brecha mas costo de la obra)", "SNIP (Si Tuviera)\r\n\r", "DÍAS HABILES QUE EL EXPEDIENTE TARDA EN LA SECCIÓN\r\n\r\n", "NOMBRE DE QUIEN EMITE LA OPINION TÉCNICA", "OBSERVACIONES"];
+const ALIAS = {codigo:["CODIGO"], municipio:["MUNCIPIO"], prof:["PROFESIONAL", "TECNICO RESPONSABLE", "TECNICO RESPONSABLE / PROFESIONAL"],nota:["No. NOTA DE TRABAJO DDRISS"]};
+let TITULOS = [...ENCABEZADOS];
+function clave(v){return n(v).replace(/[^A-Z0-9]/g, "");}
+function mapearColumnas(encabezados){
+  if(!Array.isArray(encabezados)) throw new Error("La fuente no devolvió encabezados; no es posible validar las columnas.");
+  const normalizados=encabezados.map(clave), mapa={};
+  CAMPOS.forEach((campo,i)=>{
+    const opciones=[ENCABEZADOS[i],...(ALIAS[campo]||[])].map(clave);
+    const indices=normalizados.map((h,k)=>opciones.includes(h)?k:-1).filter(k=>k>=0);
+    if(indices.length!==1) throw new Error("Revise el encabezado: "+ENCABEZADOS[i]);
+    mapa[campo]=indices[0];
+  });
+  return mapa;
+}
+async function leerFuente(){
+  let ultimo;
+  for(let intento=0;intento<2;intento++){
+    const control=new AbortController();
+    const limite=setTimeout(()=>control.abort(),25000);
+    try{
+      const url=intento===0?API_URL+"?t="+Date.now():API_URL;
+      const respuesta=await fetch(url,{cache:"no-store",signal:control.signal});
+      if(!respuesta.ok) throw new Error("HTTP "+respuesta.status);
+      let json;
+      try{json=await respuesta.json();}catch(e){throw new Error("La conexión no devolvió datos JSON. Revise la implementación de Apps Script.");}
+      if(json.ok===false) throw new Error(json.error||"Error en Apps Script");
+      return json;
+    }catch(e){ultimo=e;}finally{clearTimeout(limite);}
+  }
+  throw ultimo;
+}
+let cargando=false;
 
 
 let DATA=[];
@@ -783,8 +784,7 @@ function year(r){
 
 /*
 IMPORTANTE:
-Se busca primero en CÓDIGO, columna B,
-porque allí está el año 2025 / 2026.
+Se utiliza primero el AÑO declarado en la fuente (también admite el encabezado anterior CODIGO).
 */
 
 let codigo=t(r[C.codigo]);
@@ -813,6 +813,8 @@ return "SIN AÑO";
 
 
 async function cargar(){
+if(cargando)return;
+cargando=true;
 
 const estado=document.getElementById("estado");
 
@@ -823,34 +825,8 @@ estado.textContent=
 
 try{
 
-const respuesta=
-await fetch(
-API_URL+"?t="+Date.now(),
-{
-cache:"no-store"
-}
-);
-
-if(!respuesta.ok){
-
-throw new Error(
-"HTTP "+respuesta.status
-);
-
-}
-
-const json=
-await respuesta.json();
-
-
-if(json.ok===false){
-
-throw new Error(
-json.error || "Error en Apps Script"
-);
-
-}
-
+const json=await leerFuente();
+const nuevoMapa=mapearColumnas(json.encabezados);
 
 let rows=[];
 
@@ -871,6 +847,8 @@ throw new Error(
 }
 
 
+C=nuevoMapa;
+TITULOS=[...json.encabezados];
 DATA=
 rows.filter(
 fila=>
@@ -912,9 +890,13 @@ estado.className="status error";
 
 estado.textContent=
 "No fue posible cargar la información: "+
-error.message;
+(error.name==="AbortError"?"La conexión tardó demasiado. Intente actualizar nuevamente.":error.message)+
+(DATA.length?" Se conservan los datos de la última lectura correcta.":" Pulse Actualizar información para reintentar.");
+document.getElementById("ultimaActualizacion").textContent=DATA.length?document.getElementById("ultimaActualizacion").textContent:"Sin lectura confirmada de la fuente.";
 
 }
+
+finally{cargando=false;}
 
 }
 
@@ -1246,7 +1228,7 @@ horizontal=false
 const canvas=
 document.getElementById(id);
 
-if(!canvas)return;
+if(!canvas || typeof Chart==="undefined")return;
 
 
 if(CHARTS[id]){
@@ -1654,7 +1636,7 @@ ${esc(opinion)||"SIN DATO"}
 const COLS=[
 
 ["NO.",0],
-["CÓDIGO",1],
+["AÑO",1],
 ["DDRISS",2],
 ["MUNICIPIO",3],
 ["DMS",4],
@@ -1688,6 +1670,7 @@ const COLS=[
 
 
 function tabla(){
+const columnas=TITULOS.map((titulo,indice)=>[titulo,indice]);
 
 const thead=
 document.getElementById("thead");
@@ -1700,9 +1683,9 @@ thead.innerHTML=
 
 "<tr>"+
 
-COLS
+columnas
 .map(
-c=>`<th>${c[0]}</th>`
+c=>`<th>${esc(c[0])}</th>`
 )
 .join("")
 
@@ -1716,7 +1699,7 @@ tbody.innerHTML=`
 <tr>
 
 <td
-colspan="${COLS.length}"
+colspan="${columnas.length}"
 style="text-align:center;padding:30px">
 
 No hay registros para mostrar.
@@ -1742,7 +1725,7 @@ return(
 
 "<tr>"+
 
-COLS
+columnas
 
 .map(c=>{
 
