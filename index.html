@@ -695,23 +695,96 @@ function mapearColumnas(encabezados){
   });
   return mapa;
 }
-async function leerFuente(){
-  let ultimo;
-  for(let intento=0;intento<2;intento++){
-    const control=new AbortController();
-    const limite=setTimeout(()=>control.abort(),25000);
-    try{
-      const url=intento===0?API_URL+"?t="+Date.now():API_URL;
-      const respuesta=await fetch(url,{cache:"no-store",signal:control.signal});
-      if(!respuesta.ok) throw new Error("HTTP "+respuesta.status);
-      let json;
-      try{json=await respuesta.json();}catch(e){throw new Error("La conexión no devolvió datos JSON. Revise la implementación de Apps Script.");}
-      if(json.ok===false) throw new Error(json.error||"Error en Apps Script");
-      return json;
-    }catch(e){ultimo=e;}finally{clearTimeout(limite);}
-  }
-  throw ultimo;
+async function abrirDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open("opinionesTecnicasDB",1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains("expedientes")){
+        db.createObjectStore("expedientes",{keyPath:"fila"});
+      }
+      if(!db.objectStoreNames.contains("meta")){
+        db.createObjectStore("meta",{keyPath:"clave"});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
 }
+
+async function dbGetAll(){
+  const db=await abrirDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("expedientes","readonly");
+    const req=tx.objectStore("expedientes").getAll();
+    req.onsuccess=()=>resolve(req.result||[]);
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function dbGetMeta(clave){
+  const db=await abrirDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("meta","readonly");
+    const req=tx.objectStore("meta").get(clave);
+    req.onsuccess=()=>resolve(req.result?req.result.valor:null);
+    req.onerror=()=>reject(req.error);
+  });
+}
+
+async function dbSetMeta(clave,valor){
+  const db=await abrirDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("meta","readwrite");
+    tx.objectStore("meta").put({clave,valor});
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+async function dbGuardarExpedientes(registros){
+  if(!registros.length)return;
+  const db=await abrirDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("expedientes","readwrite");
+    const store=tx.objectStore("expedientes");
+    registros.forEach(r=>store.put(r));
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+async function cargarCacheLocal(){
+  const registros=await dbGetAll();
+  DATA=registros
+    .sort((a,b)=>a.fila-b.fila)
+    .map(x=>x.valores)
+    .filter(fila=>Array.isArray(fila)&&fila.some(celda=>t(celda)!==""));
+  FILTRADOS=[...DATA];
+
+  const encabezados=await dbGetMeta("encabezados");
+  if(Array.isArray(encabezados)&&encabezados.length){
+    C=mapearColumnas(encabezados);
+    TITULOS=[...encabezados];
+  }
+}
+
+async function leerFuente(desdeFila=1,limite=1000){
+  const control=new AbortController();
+  const limiteTiempo=setTimeout(()=>control.abort(),45000);
+  try{
+    const url=API_URL+"?desde="+encodeURIComponent(desdeFila)+"&limite="+encodeURIComponent(limite)+"&t="+Date.now();
+    const respuesta=await fetch(url,{cache:"no-store",signal:control.signal});
+    if(!respuesta.ok) throw new Error("HTTP "+respuesta.status);
+    let json;
+    try{json=await respuesta.json();}catch(e){throw new Error("La conexión no devolvió datos JSON. Revise la implementación de Apps Script.");}
+    if(json.ok===false) throw new Error(json.error||"Error en Apps Script");
+    return json;
+  }finally{
+    clearTimeout(limiteTiempo);
+  }
+}
+
 let cargando=false;
 
 
@@ -813,93 +886,91 @@ return "SIN AÑO";
 
 
 async function cargar(){
-if(cargando)return;
-cargando=true;
+  if(cargando)return;
+  cargando=true;
 
-const estado=document.getElementById("estado");
+  const estado=document.getElementById("estado");
+  estado.className="status";
 
-estado.className="status";
+  try{
+    await cargarCacheLocal();
 
-estado.textContent=
-"Actualizando información desde Google Sheets...";
+    if(DATA.length){
+      construirFiltros();
+      aplicar();
+      estado.className="status ok";
+      estado.textContent="Base local disponible: "+DATA.length.toLocaleString("es-GT")+" expedientes. Buscando registros nuevos...";
+    }else{
+      estado.textContent="Primera sincronización. Descargando la base por bloques...";
+    }
 
-try{
+    let ultimaFilaGuardada=Number(await dbGetMeta("ultimaFila"))||1;
+    let nuevos=0;
+    let hayMas=true;
 
-const json=await leerFuente();
-const nuevoMapa=mapearColumnas(json.encabezados);
+    while(hayMas){
+      const json=await leerFuente(ultimaFilaGuardada,1000);
 
-let rows=[];
+      if(!Array.isArray(json.encabezados)){
+        throw new Error("La fuente no devolvió encabezados.");
+      }
 
-if(Array.isArray(json.data)){
+      C=mapearColumnas(json.encabezados);
+      TITULOS=[...json.encabezados];
 
-rows=json.data;
+      const registros=Array.isArray(json.registros)?json.registros:[];
+      const validos=registros.filter(r=>r&&Number.isFinite(Number(r.fila))&&Array.isArray(r.valores));
 
-}else if(Array.isArray(json)){
+      if(validos.length){
+        await dbGuardarExpedientes(validos.map(r=>({fila:Number(r.fila),valores:r.valores})));
+        nuevos+=validos.length;
+      }
 
-rows=json;
+      const hasta=Number(json.hasta)||ultimaFilaGuardada;
+      if(hasta<=ultimaFilaGuardada && json.hayMas){
+        throw new Error("La sincronización no avanzó de fila.");
+      }
 
-}else{
+      ultimaFilaGuardada=hasta;
+      await dbSetMeta("ultimaFila",ultimaFilaGuardada);
+      await dbSetMeta("encabezados",json.encabezados);
+      await dbSetMeta("ultimaActualizacion",json.actualizado||new Date().toLocaleString("es-GT"));
 
-throw new Error(
-"No se encontraron datos en la respuesta."
-);
+      hayMas=Boolean(json.hayMas);
+      estado.className="status";
+      estado.textContent="Sincronizando registros nuevos... "+nuevos.toLocaleString("es-GT")+" agregado(s).";
+    }
 
+    await cargarCacheLocal();
+    FILTRADOS=[...DATA];
+    construirFiltros();
+    aplicar();
+
+    const ultima=await dbGetMeta("ultimaActualizacion");
+    document.getElementById("ultimaActualizacion").textContent=
+      "Última sincronización: "+(ultima||new Date().toLocaleString("es-GT"));
+
+    estado.className="status ok";
+    estado.textContent=nuevos
+      ? "Sincronización completa. Se agregaron "+nuevos.toLocaleString("es-GT")+" registro(s) nuevo(s). Total guardado: "+DATA.length.toLocaleString("es-GT")+" expedientes."
+      : "Información al día. No hay registros nuevos. Total guardado: "+DATA.length.toLocaleString("es-GT")+" expedientes.";
+
+  }catch(error){
+    console.error(error);
+    estado.className="status error";
+    estado.textContent=
+      "No fue posible completar la sincronización: "+
+      (error.name==="AbortError"?"La conexión tardó demasiado.":error.message)+
+      (DATA.length?" Se conservan y muestran los "+DATA.length.toLocaleString("es-GT")+" expedientes ya guardados.":" Pulse Actualizar información para reintentar.");
+
+    if(DATA.length){
+      construirFiltros();
+      aplicar();
+    }
+  }finally{
+    cargando=false;
+  }
 }
-
-
-C=nuevoMapa;
-TITULOS=[...json.encabezados];
-DATA=
-rows.filter(
-fila=>
-Array.isArray(fila) &&
-fila.some(
-celda=>t(celda)!==""
-)
-);
-
-
-FILTRADOS=[...DATA];
-
-
-estado.className="status ok";
-
-estado.textContent=
-"Base actualizada correctamente. "+
-DATA.length.toLocaleString("es-GT")+
-" expedientes cargados.";
-
-
-document.getElementById(
-"ultimaActualizacion"
-).textContent=
-"Última actualización: "+
-new Date().toLocaleString("es-GT");
-
-
-construirFiltros();
-
-aplicar();
-
-
-}catch(error){
-
-console.error(error);
-
-estado.className="status error";
-
-estado.textContent=
-"No fue posible cargar la información: "+
-(error.name==="AbortError"?"La conexión tardó demasiado. Intente actualizar nuevamente.":error.message)+
-(DATA.length?" Se conservan los datos de la última lectura correcta.":" Pulse Actualizar información para reintentar.");
-document.getElementById("ultimaActualizacion").textContent=DATA.length?document.getElementById("ultimaActualizacion").textContent:"Sin lectura confirmada de la fuente.";
-
-}
-
-finally{cargando=false;}
-
-}
-
 
 function unicos(indice){
 
