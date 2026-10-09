@@ -336,7 +336,7 @@ footer{
 <header>
 
 <img
-src="LOGOMSPAS.png"
+src="https://raw.githubusercontent.com/lesteragro/EXPEDIENTES-DE-CATEGORIZACION-DE-ESTABLECIMIENTOS-DE-SALUD-DEL-MSPAS/principal/LOGOMSPAS.png"
 class="logo"
 alt="Ministerio de Salud Pública y Asistencia Social">
 
@@ -642,8 +642,7 @@ Sistema de Opiniones Técnicas de Categorización · DDRISS
 <script>
 
 const API_URL =
-
-"https://script.google.com/macros/s/AKfycbzYysPhrvcb_dN5m27UyCMC684rFaCq3KrAMplHpLKF_jx25i9kXecY2AL8M-tSfm6lCg/exec";
+"https://script.google.com/macros/s/AKfycbzb-INR0PUn18wKTEKHHvrVt9JMgT9-0YoPpLs5EFXndCwA9mnTChnyoZCW5HV4nLNhdw/exec";
 
 
 // Índices actualizados y validados con los encabezados de la fuente.
@@ -813,7 +812,7 @@ function leerFuente(desdeFila=1,limite=100){
       }else finalizar(null,datos);
     };
     script.onerror=()=>finalizar(new Error("No se pudo cargar el servicio Apps Script. Compruebe el acceso público y la versión implementada."));
-    reloj=setTimeout(()=>finalizar(new Error("Apps Script no respondió dentro de 30 segundos.")),30000);
+    reloj=setTimeout(()=>finalizar(new Error("Apps Script no respondió en 25 segundos. Verifique la implementación web y el acceso.")),25000);
     const url=new URL(API_URL);
     url.searchParams.set("desde",String(desdeFila));
     url.searchParams.set("limite",String(limite));
@@ -958,6 +957,7 @@ async function cargar(){
     let hayMas=true;
     while(hayMas){
       if(++paginas>1000)throw new Error("Se superó el número máximo de bloques.");
+      estado.textContent="Conectando con Google Sheets · bloque "+paginas+"...";
       const json=await leerFuente(cursor,100);
       if(!Array.isArray(json.encabezados)){
         throw new Error("La respuesta no contiene encabezados.");
