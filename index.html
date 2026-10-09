@@ -685,15 +685,27 @@ const ALIAS = {codigo:["CODIGO"], municipio:["MUNCIPIO"], prof:["PROFESIONAL", "
 let TITULOS = [...ENCABEZADOS];
 function clave(v){return n(v).replace(/[^A-Z0-9]/g, "");}
 function mapearColumnas(encabezados){
-  if(!Array.isArray(encabezados)) throw new Error("La fuente no devolvió encabezados; no es posible validar las columnas.");
-  const normalizados=encabezados.map(clave), mapa={};
-  CAMPOS.forEach((campo,i)=>{
-    const opciones=[ENCABEZADOS[i],...(ALIAS[campo]||[])].map(clave);
-    const indices=normalizados.map((h,k)=>opciones.includes(h)?k:-1).filter(k=>k>=0);
-    if(indices.length!==1) throw new Error("Revise el encabezado: "+ENCABEZADOS[i]);
-    mapa[campo]=indices[0];
-  });
-  return mapa;
+  if(!Array.isArray(encabezados) || encabezados.length<30){
+    throw new Error("La fuente debe contener al menos 30 columnas; se recibieron "+(encabezados?.length||0)+".");
+  }
+  // La hoja oficial dispone de 30 campos conocidos y puede tener columnas
+  // adicionales (por ejemplo, una columna vacía al final).
+  // Comprobamos las columnas esenciales antes de usar las posiciones oficiales.
+  const esenciales = {
+    0:["NO","NUMERO"], 1:["ANO","CODIGO"],
+    2:["DDRISS"], 3:["MUNICIPIO","MUNCIPIO"],
+    4:["DMS"], 5:["COMUNIDAD"],
+    16:["FAVORABLE","OPINIONTECNICA"],
+    19:["FUENTEDEFINANCIAMIENTO"],
+    28:["NOMBREDEQUIENEMITELAOPINIONTECNICA","PROFESIONAL","TECNICO"]
+  };
+  for(const [indice,alternativas] of Object.entries(esenciales)){
+    const recibido=clave(encabezados[Number(indice)]);
+    if(!alternativas.some(op=>recibido.includes(op))){
+      throw new Error("La columna "+(Number(indice)+1)+" no coincide con la estructura esperada: "+encabezados[indice]);
+    }
+  }
+  return Object.fromEntries(CAMPOS.map((campo,indice)=>[campo,indice]));
 }
 async function abrirDB(){
   return new Promise((resolve,reject)=>{
@@ -742,15 +754,21 @@ async function dbSetMeta(clave,valor){
   });
 }
 
-async function dbGuardarExpedientes(registros){
-  if(!registros.length)return;
+async function dbReemplazarExpedientes(registros, encabezados, actualizado){
   const db=await abrirDB();
   return new Promise((resolve,reject)=>{
-    const tx=db.transaction("expedientes","readwrite");
+    const tx=db.transaction(["expedientes","meta"],"readwrite");
     const store=tx.objectStore("expedientes");
+    const meta=tx.objectStore("meta");
+    // Reemplazo atómico: si falla, la versión anterior permanece intacta.
+    store.clear();
     registros.forEach(r=>store.put(r));
+    meta.put({clave:"encabezados",valor:encabezados});
+    meta.put({clave:"ultimaActualizacion",valor:actualizado});
+    meta.put({clave:"ultimaFila",valor:1});
     tx.oncomplete=()=>resolve();
     tx.onerror=()=>reject(tx.error);
+    tx.onabort=()=>reject(tx.error||new Error("No se pudo guardar la base local"));
   });
 }
 
@@ -771,7 +789,7 @@ async function cargarCacheLocal(){
 
 async function leerFuente(desdeFila=1,limite=1000){
   const control=new AbortController();
-  const limiteTiempo=setTimeout(()=>control.abort(),45000);
+  const limiteTiempo=setTimeout(()=>control.abort(),60000);
   try{
     const url=API_URL+"?desde="+encodeURIComponent(desdeFila)+"&limite="+encodeURIComponent(limite)+"&t="+Date.now();
     const respuesta=await fetch(url,{cache:"no-store",signal:control.signal});
@@ -888,85 +906,83 @@ return "SIN AÑO";
 async function cargar(){
   if(cargando)return;
   cargando=true;
-
   const estado=document.getElementById("estado");
   estado.className="status";
-
   try{
-    await cargarCacheLocal();
-
-    if(DATA.length){
-      construirFiltros();
-      aplicar();
-      estado.className="status ok";
-      estado.textContent="Base local disponible: "+DATA.length.toLocaleString("es-GT")+" expedientes. Buscando registros nuevos...";
-    }else{
-      estado.textContent="Primera sincronización. Descargando la base por bloques...";
+    // Mostrar primero la última base válida, si existe.
+    try {
+      await cargarCacheLocal();
+      if(DATA.length){
+        construirFiltros();
+        aplicar();
+        const ultima=await dbGetMeta("ultimaActualizacion");
+        document.getElementById("ultimaActualizacion").textContent=
+          "Última sincronización: "+(ultima||"sin fecha");
+        estado.textContent="Mostrando "+DATA.length.toLocaleString("es-GT")+" expedientes guardados. Consultando cambios...";
+      } else {
+        estado.textContent="Descargando expedientes desde Google Sheets...";
+      }
+    } catch(errorCache){
+      console.warn("No fue posible leer la base local",errorCache);
+      estado.textContent="Consultando Google Sheets...";
     }
 
-    let ultimaFilaGuardada=Number(await dbGetMeta("ultimaFila"))||1;
-    let nuevos=0;
+    // Relectura completa: actualiza también expedientes modificados y eliminados.
+    // Solo se reemplaza la base visible una vez que TODOS los bloques llegan bien.
+    const nuevosRegistros=[];
+    let cursor=1;
+    let encabezados=null;
+    let actualizado=null;
+    let paginas=0;
     let hayMas=true;
-
     while(hayMas){
-      const json=await leerFuente(ultimaFilaGuardada,1000);
-
+      if(++paginas>1000)throw new Error("Se superó el número máximo de bloques.");
+      const json=await leerFuente(cursor,1000);
       if(!Array.isArray(json.encabezados)){
-        throw new Error("La fuente no devolvió encabezados.");
+        throw new Error("La respuesta no contiene encabezados.");
       }
-
-      C=mapearColumnas(json.encabezados);
-      TITULOS=[...json.encabezados];
-
-      const registros=Array.isArray(json.registros)?json.registros:[];
-      const validos=registros.filter(r=>r&&Number.isFinite(Number(r.fila))&&Array.isArray(r.valores));
-
-      if(validos.length){
-        await dbGuardarExpedientes(validos.map(r=>({fila:Number(r.fila),valores:r.valores})));
-        nuevos+=validos.length;
+      mapearColumnas(json.encabezados);
+      if(!encabezados)encabezados=json.encabezados;
+      else if(JSON.stringify(encabezados)!==JSON.stringify(json.encabezados)){
+        throw new Error("Los encabezados cambiaron durante la descarga; vuelva a intentar.");
       }
-
-      const hasta=Number(json.hasta)||ultimaFilaGuardada;
-      if(hasta<=ultimaFilaGuardada && json.hayMas){
-        throw new Error("La sincronización no avanzó de fila.");
+      if(!Array.isArray(json.registros)){
+        throw new Error("La respuesta no contiene la lista de registros.");
       }
-
-      ultimaFilaGuardada=hasta;
-      await dbSetMeta("ultimaFila",ultimaFilaGuardada);
-      await dbSetMeta("encabezados",json.encabezados);
-      await dbSetMeta("ultimaActualizacion",json.actualizado||new Date().toLocaleString("es-GT"));
-
-      hayMas=Boolean(json.hayMas);
-      estado.className="status";
-      estado.textContent="Sincronizando registros nuevos... "+nuevos.toLocaleString("es-GT")+" agregado(s).";
+      const hasta=Number(json.hasta);
+      hayMas=json.hayMas===true;
+      if(!Number.isSafeInteger(hasta) || hasta<cursor || (hayMas && hasta===cursor)){
+        throw new Error("La descarga no avanzó correctamente.");
+      }
+      for(const r of json.registros){
+        const fila=Number(r?.fila);
+        if(!Number.isSafeInteger(fila) || fila<=cursor || fila>hasta || !Array.isArray(r.valores)){
+          throw new Error("Se recibió un expediente con formato incorrecto.");
+        }
+        if(r.valores.some(v=>t(v)!=="")){
+          nuevosRegistros.push({fila,valores:r.valores});
+        }
+      }
+      cursor=hasta;
+      actualizado=json.actualizado||actualizado;
+      estado.textContent="Descargando Google Sheets: "+nuevosRegistros.length.toLocaleString("es-GT")+" expedientes recibidos...";
     }
-
+    const filas=new Set(nuevosRegistros.map(r=>r.fila));
+    if(filas.size!==nuevosRegistros.length)throw new Error("La fuente devolvió filas duplicadas.");
+    await dbReemplazarExpedientes(nuevosRegistros,encabezados,actualizado||new Date().toLocaleString("es-GT"));
     await cargarCacheLocal();
-    FILTRADOS=[...DATA];
     construirFiltros();
     aplicar();
-
     const ultima=await dbGetMeta("ultimaActualizacion");
-    document.getElementById("ultimaActualizacion").textContent=
-      "Última sincronización: "+(ultima||new Date().toLocaleString("es-GT"));
-
+    document.getElementById("ultimaActualizacion").textContent="Última sincronización: "+ultima;
     estado.className="status ok";
-    estado.textContent=nuevos
-      ? "Sincronización completa. Se agregaron "+nuevos.toLocaleString("es-GT")+" registro(s) nuevo(s). Total guardado: "+DATA.length.toLocaleString("es-GT")+" expedientes."
-      : "Información al día. No hay registros nuevos. Total guardado: "+DATA.length.toLocaleString("es-GT")+" expedientes.";
-
+    estado.textContent="Información actualizada: "+DATA.length.toLocaleString("es-GT")+" expedientes. Se incluyeron los cambios de registros anteriores.";
   }catch(error){
-    console.error(error);
+    console.error("Error de sincronización",error);
     estado.className="status error";
-    estado.textContent=
-      "No fue posible completar la sincronización: "+
-      (error.name==="AbortError"?"La conexión tardó demasiado.":error.message)+
-      (DATA.length?" Se conservan y muestran los "+DATA.length.toLocaleString("es-GT")+" expedientes ya guardados.":" Pulse Actualizar información para reintentar.");
-
-    if(DATA.length){
-      construirFiltros();
-      aplicar();
-    }
+    estado.textContent="No fue posible actualizar Google Sheets: "+
+      (error.name==="AbortError"?"La conexión superó los 60 segundos.":error.message)+
+      (DATA.length?" Se conserva la última base local de "+DATA.length.toLocaleString("es-GT")+" expedientes.":" Vuelva a intentar.");
   }finally{
     cargando=false;
   }
