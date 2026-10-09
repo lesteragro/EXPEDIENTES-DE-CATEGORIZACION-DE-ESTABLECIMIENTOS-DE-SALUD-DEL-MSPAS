@@ -792,7 +792,13 @@ async function leerFuente(desdeFila=1,limite=1000){
   const limiteTiempo=setTimeout(()=>control.abort(),60000);
   try{
     const url=API_URL+"?desde="+encodeURIComponent(desdeFila)+"&limite="+encodeURIComponent(limite)+"&t="+Date.now();
-    const respuesta=await fetch(url,{cache:"no-store",signal:control.signal});
+    let respuesta;
+    try {
+      respuesta=await fetch(url,{cache:"no-store",signal:control.signal,redirect:"follow"});
+    } catch (err) {
+      if(err.name==="AbortError") throw err;
+      throw new Error("El navegador no pudo acceder a Apps Script. Revise el acceso público de la implementación y posibles bloqueos CORS. Detalle: "+err.message);
+    }
     if(!respuesta.ok) throw new Error("HTTP "+respuesta.status);
     let json;
     try{json=await respuesta.json();}catch(e){throw new Error("La conexión no devolvió datos JSON. Revise la implementación de Apps Script.");}
@@ -937,7 +943,7 @@ async function cargar(){
     let hayMas=true;
     while(hayMas){
       if(++paginas>1000)throw new Error("Se superó el número máximo de bloques.");
-      const json=await leerFuente(cursor,1000);
+      const json=await leerFuente(cursor,250);
       if(!Array.isArray(json.encabezados)){
         throw new Error("La respuesta no contiene encabezados.");
       }
@@ -947,7 +953,7 @@ async function cargar(){
         throw new Error("Los encabezados cambiaron durante la descarga; vuelva a intentar.");
       }
       if(!Array.isArray(json.registros)){
-        throw new Error("La respuesta no contiene la lista de registros.");
+        throw new Error("Apps Script respondió, pero no incluyó 'registros'. Verifique que la versión publicada sea la corregida.");
       }
       const hasta=Number(json.hasta);
       hayMas=json.hayMas===true;
