@@ -787,26 +787,40 @@ async function cargarCacheLocal(){
   }
 }
 
-async function leerFuente(desdeFila=1,limite=1000){
-  const control=new AbortController();
-  const limiteTiempo=setTimeout(()=>control.abort(),60000);
-  try{
-    const url=API_URL+"?desde="+encodeURIComponent(desdeFila)+"&limite="+encodeURIComponent(limite)+"&t="+Date.now();
-    let respuesta;
-    try {
-      respuesta=await fetch(url,{cache:"no-store",signal:control.signal,redirect:"follow"});
-    } catch (err) {
-      if(err.name==="AbortError") throw err;
-      throw new Error("El navegador no pudo acceder a Apps Script. Revise el acceso público de la implementación y posibles bloqueos CORS. Detalle: "+err.message);
-    }
-    if(!respuesta.ok) throw new Error("HTTP "+respuesta.status);
-    let json;
-    try{json=await respuesta.json();}catch(e){throw new Error("La conexión no devolvió datos JSON. Revise la implementación de Apps Script.");}
-    if(json.ok===false) throw new Error(json.error||"Error en Apps Script");
-    return json;
-  }finally{
-    clearTimeout(limiteTiempo);
-  }
+// JSONP: evita bloqueos CORS/redirecciones entre GitHub Pages y Apps Script.
+let secuenciaJSONP=0;
+function leerFuente(desdeFila=1,limite=100){
+  return new Promise((resolve,reject)=>{
+    const nombre="__otRespuesta_"+(++secuenciaJSONP);
+    const script=document.createElement("script");
+    let terminado=false;
+    let reloj;
+    const limpiar=()=>{
+      clearTimeout(reloj);
+      script.remove();
+      try{delete window[nombre];}catch(_){window[nombre]=undefined;}
+    };
+    const finalizar=(error,datos)=>{
+      if(terminado)return;
+      terminado=true;
+      limpiar();
+      if(error)reject(error);else resolve(datos);
+    };
+    window[nombre]=(datos)=>{
+      if(!datos || datos.ok!==true){
+        finalizar(new Error(datos?.error || "Apps Script no devolvió una respuesta válida."));
+      }else finalizar(null,datos);
+    };
+    script.onerror=()=>finalizar(new Error("No se pudo cargar el servicio Apps Script. Compruebe el acceso público y la versión implementada."));
+    reloj=setTimeout(()=>finalizar(new Error("Apps Script no respondió dentro de 30 segundos.")),30000);
+    const url=new URL(API_URL);
+    url.searchParams.set("desde",String(desdeFila));
+    url.searchParams.set("limite",String(limite));
+    url.searchParams.set("callback",nombre);
+    url.searchParams.set("t",String(Date.now()));
+    script.src=url.toString();
+    document.head.appendChild(script);
+  });
 }
 
 let cargando=false;
@@ -943,7 +957,7 @@ async function cargar(){
     let hayMas=true;
     while(hayMas){
       if(++paginas>1000)throw new Error("Se superó el número máximo de bloques.");
-      const json=await leerFuente(cursor,250);
+      const json=await leerFuente(cursor,100);
       if(!Array.isArray(json.encabezados)){
         throw new Error("La respuesta no contiene encabezados.");
       }
@@ -973,6 +987,7 @@ async function cargar(){
       actualizado=json.actualizado||actualizado;
       estado.textContent="Descargando Google Sheets: "+nuevosRegistros.length.toLocaleString("es-GT")+" expedientes recibidos...";
     }
+    if(!nuevosRegistros.length && DATA.length)throw new Error("La fuente devolvió cero registros; se conservaron los expedientes existentes.");
     const filas=new Set(nuevosRegistros.map(r=>r.fila));
     if(filas.size!==nuevosRegistros.length)throw new Error("La fuente devolvió filas duplicadas.");
     await dbReemplazarExpedientes(nuevosRegistros,encabezados,actualizado||new Date().toLocaleString("es-GT"));
